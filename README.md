@@ -1,42 +1,63 @@
-# sv
+# leo's site
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A personal IndieWeb site built with [SvelteKit](https://kit.svelte.dev) and [mdsvex](https://mdsvex.pngwn.io).
 
-## Creating a project
+Matcha-green palette, markdown-based posts, microformats2 markup (h-card, h-entry).
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Stack
 
-```sh
-# create a new project
-npx sv create my-app
+- **Framework** — SvelteKit 2 + Svelte 5 (runes)
+- **Markdown** — mdsvex (`.md` files compile to Svelte components)
+- **Styling** — Custom CSS with design tokens in `src/app.css`
+- **Fonts** — Inter (body) + IBM Plex Mono (code/accents) via Google Fonts
+
+## Pages
+
+| Route | Description |
+|-------|-------------|
+| `/` | Home — hero, currently section, recent posts |
+| `/blog` | Post index grouped by year |
+| `/blog/[slug]` | Individual post |
+| `/about` | About + h-card |
+| `/now` | /now page |
+
+## Adding a post
+
+Drop a `.md` file into `src/posts/` with this frontmatter:
+
+```yaml
+---
+title: My Post Title
+date: '2026-04-10'
+description: One-line summary shown in cards and meta tags.
+tags: [tag1, tag2]
+published: true
+---
+
+Post content here...
 ```
 
-To recreate this project with the same configuration:
+The post is picked up automatically — no config changes needed.
+Set `published: false` to keep a draft out of all listings.
+
+## Development
 
 ```sh
-# recreate this project
-npx sv@0.12.8 create --template minimal --types ts --install npm ./
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Type-check:
 
-To create a production version of your app:
+```sh
+npm run check
+```
+
+## Build
 
 ```sh
 npm run build
+npm run preview
 ```
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+Deploy by swapping `@sveltejs/adapter-auto` in `svelte.config.js` for the adapter that matches your host (Netlify, Vercel, Node, static, etc.).
