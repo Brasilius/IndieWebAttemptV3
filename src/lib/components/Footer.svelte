@@ -20,7 +20,7 @@
 			<div class="left">
 				<span class="copy">&copy; {year} Leo</span>
 				<span class="sep" aria-hidden="true">/</span>
-				<a href="/rss.xml">rss</a>
+				<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" rel="noopener" target="_blank">Yipee!</a>
 			</div>
 
 			<nav class="socials" aria-label="Social links">
