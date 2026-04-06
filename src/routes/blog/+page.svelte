@@ -31,7 +31,7 @@
 <div class="container">
 	<header class="page-header">
 		<h1>Writing</h1>
-		<p>Notes, essays, and half-formed thoughts.</p>
+		<p>Many, many, thoughts.</p>
 	</header>
 
 	{#if data.posts.length === 0}

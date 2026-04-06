@@ -2,8 +2,8 @@
 	const year = new Date().getFullYear();
 
 	const socials = [
-		{ href: 'https://github.com/yourusername',    label: 'github',   rel: 'me noopener noreferrer' },
-		{ href: 'https://mastodon.social/@you',       label: 'mastodon', rel: 'me noopener noreferrer' },
+		{ href: 'https://github.com/brasilius',    label: 'github',   rel: 'me noopener noreferrer' },
+		{ href: 'https://www.instagram.com/niels_leo_larsen/',       label: 'instagram', rel: 'me noopener noreferrer' },
 	];
 </script>
 

@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Leo — making things on the internet</title>
+	<title>Leo — making things fly!</title>
 	<meta name="description" content="Personal site and digital garden." />
 </svelte:head>
 
@@ -15,24 +15,23 @@
 	<!-- Hero / h-card -->
 	<section class="hero h-card">
 		<div class="greeting">
-			<span class="hello">hello, world</span>
+			<span class="hello">"Rocky and Grace Save Stars!"</span>
 		</div>
 
 		<h1>
-			I'm <a class="p-name u-url" href="/" rel="me">Leo</a>.
+			I'm <a class="p-name u-url" href="/" rel="me">Leo 🚀</a>.
 		</h1>
 
 		<p class="bio p-note">
-			I build things for the web, take notes in the open, and believe the internet is better
-			when people own their own corner of it. This is mine.
+			Aerospace Engineer by trade, Computer Enthusiast by passion. I work across the stack, from embedded systems to finite element analysis and computational fluid dynamics and even astrodynamics! 
 		</p>
 
 		<div class="links">
 			<a href="/about">more about me</a>
 			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://github.com/yourusername" rel="me noopener" target="_blank">github</a>
+			<a href="https://github.com/brasilius" rel="me noopener" target="_blank">github</a>
 			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://mastodon.social/@you" rel="me noopener" target="_blank">mastodon</a>
+			<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">instagram</a>
 		</div>
 	</section>
 
@@ -46,8 +45,8 @@
 		</h2>
 		<ul>
 			<li><span class="key">reading</span> <span class="val">Project Hail Mary — Andy Weir</span></li>
-			<li><span class="key">building</span> <span class="val">this site</span></li>
-			<li><span class="key">learning</span> <span class="val">Svelte 5 runes</span></li>
+			<li><span class="key">building</span> <span class="val">a new payload 😭</span></li>
+			<li><span class="key">learning</span> <span class="val">about Paul Atreides</span></li>
 		</ul>
 		<a href="/now" class="now-link">full /now page →</a>
 	</section>

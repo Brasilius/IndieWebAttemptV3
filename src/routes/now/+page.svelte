@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>Now — Leo</title>
+	<title>Now - Leo</title>
 	<meta name="description" content="What I'm up to right now." />
 </svelte:head>
 
@@ -18,9 +18,9 @@
 		<section>
 			<h2>Working on</h2>
 			<ul>
-				<li>Building out this personal site — getting the IndieWeb stack in place</li>
-				<li>Learning Svelte 5 runes in depth</li>
-				<li>A small side project: a local-first note-taking tool</li>
+				<li>Staying up WAAAY too late working on homework.</li>
+				<li>Not exploding 5,000$ carbon fiber rockets.</li>
+				<li>Getting a motor controller to work.</li>
 			</ul>
 		</section>
 
@@ -28,12 +28,12 @@
 			<h2>Reading</h2>
 			<ul>
 				<li>
-					<strong>Project Hail Mary</strong> — Andy Weir
-					<span class="note">Probably the most fun I've had reading sci-fi in years.</span>
+					<strong>Project Hail Mary</strong> - Andy Weir
+					<span class="note">The movie convinced me to do it.</span>
 				</li>
 				<li>
-					<strong>The Design of Everyday Things</strong> — Don Norman
-					<span class="note">A re-read. Still full of things I missed the first time.</span>
+					<strong>Dune Part One</strong> - Frank Herbert
+					<span class="note">On a similar story to Hail Mary, I need to lock in before movie 3.</span>
 				</li>
 			</ul>
 		</section>
@@ -41,23 +41,21 @@
 		<section>
 			<h2>Listening to</h2>
 			<ul>
-				<li>Khruangbin — Con Todo El Mundo</li>
-				<li>Floating Points — Crush</li>
+				<li>Spaghetti - LE SSERAFIM</li>
+				<li>Fall Up - Voila</li>
 			</ul>
 		</section>
 
 		<section>
 			<h2>Thinking about</h2>
 			<p>
-				The slow collapse of social platforms and what that means for people who've
-				spent years building audiences there. The best answer I keep landing on: own your words.
-				Put them somewhere you control. That's what this site is for.
+				How disturbingly easy it is to build a guidance, and navigation system for interplanetary travel. Like, the fact that I can write a program that calculates an optimal trajectory to Mars, and then simulate it with a high degree of fidelity on my laptop is just wild to me. The fact that this is something that hobbyists have been doing for decades is even wilder.
 			</p>
 		</section>
 
 		<section>
 			<h2>Location</h2>
-			<p>Home. Working from my desk, surrounded by too many keyboards.</p>
+			<p>Home, sipping a coffee. </p>
 		</section>
 
 	</div>
