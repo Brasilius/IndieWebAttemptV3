@@ -19,7 +19,7 @@
 		</div>
 
 		<h1>
-			I'm <a class="p-name u-url" href="/" rel="me">Leo 🚀</a>.
+			I'm <a class="p-name u-url" href="/" rel="me">Niels Leo Larsen 🚀</a>.
 		</h1>
 
 		<p class="bio p-note">
