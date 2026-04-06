@@ -2,9 +2,11 @@
 	import { page } from '$app/stores';
 
 	const links = [
-		{ href: '/about', label: 'about' },
-		{ href: '/blog',  label: 'blog'  },
-		{ href: '/now',   label: 'now'   },
+		{ href: '/about',    label: 'about'    },
+		{ href: '/blog',     label: 'blog'     },
+		{ href: '/projects', label: 'projects' },
+		{ href: '/resume',   label: 'resume'   },
+		{ href: '/now',      label: 'now'      },
 	];
 
 	function isActive(href: string) {
