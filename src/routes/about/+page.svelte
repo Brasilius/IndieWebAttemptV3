@@ -65,7 +65,7 @@
 					<a href="https://mdsvex.pngwn.io" rel="noopener" target="_blank">mdsvex</a>.
 					Styled with custom CSS and a palette of earthy matcha greens 🍵.
 					Posts are written in Markdown.
-					Source is on <a href="https://github.com/Brasilius/PayloadRepo2026" rel="noopener" target="_blank">GitHub</a>.
+					Source is on <a href="https://github.com/Brasilius/IndieWebAttemptV3" rel="noopener" target="_blank">GitHub</a>.
 				</p>
 			</div>
 		</div>
