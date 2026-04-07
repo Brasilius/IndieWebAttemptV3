@@ -72,9 +72,6 @@
 		</div>
 
 		<div class="pdf-frame">
-			{#if loading}
-				<div class="pdf-status">Loading PDF…</div>
-			{/if}
 			{#if loadError}
 				<div class="pdf-status">
 					Unable to load PDF inline.
