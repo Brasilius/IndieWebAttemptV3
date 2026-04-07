@@ -11,7 +11,7 @@
 	<div class="container">
 		<!-- IndieWeb h-card (hidden, for parsers) -->
 		<div class="h-card" hidden>
-			<a class="u-url u-uid" href="https://yoursite.com" rel="me">yoursite.com</a>
+			<a class="u-url u-uid" href="https://nielslarsen.dev" rel="me">nielslarsen.dev</a>
 			<span class="p-name">Leo</span>
 			<span class="p-note">A personal site on the IndieWeb.</span>
 		</div>
