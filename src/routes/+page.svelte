@@ -1,5 +1,6 @@
 <script lang="ts">
 	import PostCard from '$lib/components/PostCard.svelte';
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
@@ -49,6 +50,29 @@
 			<li><span class="key">learning</span> <span class="val">about Paul Atreides</span></li>
 		</ul>
 		<a href="/now" class="now-link">full /now page →</a>
+	</section>
+
+	<hr />
+
+	<!-- Recent projects -->
+	<section class="recent-projects">
+		<div class="section-header">
+			<h2 class="section-label">
+				<span class="dot" aria-hidden="true"></span>
+				recent projects
+			</h2>
+			<a href="/projects" class="see-all">all projects →</a>
+		</div>
+
+		{#if data.projects.length}
+			<div class="post-grid">
+				{#each data.projects as project}
+					<ProjectCard {project} />
+				{/each}
+			</div>
+		{:else}
+			<p class="empty">Nothing yet — coming soon.</p>
+		{/if}
 	</section>
 
 	<hr />
@@ -233,7 +257,8 @@
 		margin-bottom: 1.25rem;
 	}
 
-	.recent-posts .section-label {
+	.recent-posts .section-label,
+	.recent-projects .section-label {
 		margin-bottom: 0;
 	}
 </style>
