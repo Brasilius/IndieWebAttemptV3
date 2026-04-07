@@ -49,7 +49,7 @@
 		<section>
 			<h2>Thinking about</h2>
 			<p>
-				How disturbingly easy it is to build a guidance, and navigation system for interplanetary travel. Like, the fact that I can write a program that calculates an optimal trajectory to Mars, and then simulate it with a high degree of fidelity on my laptop is just wild to me. The fact that this is something that hobbyists have been doing for decades is even wilder.
+			Balancing having a cool looking linux distro, with being genuinely productive. I want to use hyprland but there is genuinely no way its more efficent then GNOME.
 			</p>
 		</section>
 

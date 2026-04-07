@@ -47,15 +47,14 @@
 				</p>
 
 				<p>
-					I use this website to talk about things that are ACTUALLY cool. For instance, Capybaras, those are pretty cool. Real talk though I like to write about 
-					tech that I use to solve real problems, as well as the journey it took to solve those problems.
+					I'm currently looking for new oppurtunities in both aerospace and software development. If you think I might be a good fit for your team, please reach out!
 				</p>
 
 				<h2>What I'm into</h2>
 				<ul>
-					<li>Building small, focused software tools</li>
-					<li>The IndieWeb and personal web publishing</li>
-					<li>Mechanical keyboards and analog writing</li>
+					<li>Building wireless telemetry systems</li>
+					<li>Helldivers 2 (and also Minecraft)</li>
+					<li>Mechanical keyboards and Linux ricing</li>
 					<li>Science fiction - especially sci-fi like "The Expanse"</li>
 				</ul>
 
