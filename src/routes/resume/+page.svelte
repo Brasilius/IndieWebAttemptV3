@@ -1,12 +1,49 @@
 <script>
 	import { onMount } from 'svelte';
 
-	let isIOS = false;
+	let isFirefoxIOS = false;
+	let pdfContainer;
+	let loading = true;
+	let loadError = false;
 
-	onMount(() => {
-		isIOS =
-			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
-			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+	onMount(async () => {
+		const ua = navigator.userAgent;
+		isFirefoxIOS = /FxiOS/.test(ua);
+
+		try {
+			const pdfjsLib = await import('pdfjs-dist');
+			pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+				'pdfjs-dist/build/pdf.worker.min.mjs',
+				import.meta.url
+			).href;
+
+			const pdf = await pdfjsLib.getDocument('/resume.pdf').promise;
+			const containerWidth = pdfContainer.clientWidth;
+
+			for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+				const page = await pdf.getPage(pageNum);
+				const unscaled = page.getViewport({ scale: 1 });
+				const scale = containerWidth / unscaled.width;
+				const viewport = page.getViewport({ scale });
+
+				const canvas = document.createElement('canvas');
+				canvas.width = viewport.width;
+				canvas.height = viewport.height;
+				canvas.style.width = '100%';
+				canvas.style.height = 'auto';
+				canvas.style.display = 'block';
+				if (pageNum > 1) canvas.style.marginTop = '1rem';
+
+				pdfContainer.appendChild(canvas);
+				await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+			}
+
+			loading = false;
+		} catch (e) {
+			console.error('PDF load error:', e);
+			loadError = true;
+			loading = false;
+		}
 	});
 </script>
 
@@ -23,31 +60,30 @@
 
 	<div class="resume-wrap">
 		<div class="toolbar">
-			<a href="/resume.pdf" download class="btn">download PDF</a>
+			{#if isFirefoxIOS}
+				<!-- Firefox iOS ignores the download attribute; open in new tab instead -->
+				<a href="/resume.pdf" target="_blank" rel="noopener noreferrer" class="btn">download PDF</a>
+			{:else}
+				<a href="/resume.pdf" download class="btn">download PDF</a>
+			{/if}
 			<a href="/resume.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">
 				open in new tab
 			</a>
 		</div>
 
-		{#if isIOS}
-			<div class="ios-notice">
-				<p>iOS doesn't support inline PDF viewing. Use the buttons above to download or open the resume.</p>
-			</div>
-		{:else}
-			<div class="pdf-frame">
-				<object
-					data="/resume.pdf"
-					type="application/pdf"
-					width="100%"
-					height="100%"
-				>
-					<p class="fallback">
-						Your browser can't display PDFs inline.
-						<a href="/resume.pdf" download>Download the PDF</a> instead.
-					</p>
-				</object>
-			</div>
-		{/if}
+		<div class="pdf-frame">
+			{#if loading}
+				<div class="pdf-status">Loading PDF…</div>
+			{/if}
+			{#if loadError}
+				<div class="pdf-status">
+					Unable to load PDF inline.
+					<a href="/resume.pdf" download>Download</a> or
+					<a href="/resume.pdf" target="_blank" rel="noopener noreferrer">open in new tab</a>.
+				</div>
+			{/if}
+			<div bind:this={pdfContainer} class="pdf-canvas-container"></div>
+		</div>
 	</div>
 </div>
 
@@ -109,36 +145,26 @@
 
 	.pdf-frame {
 		width: 100%;
-		height: 80vh;
-		min-height: 500px;
 		border: 1px solid var(--border);
 		border-radius: var(--radius-lg);
 		overflow: hidden;
 		background: var(--surface);
+		padding: 1rem;
+		box-sizing: border-box;
 	}
 
-	.pdf-frame iframe {
-		border: none;
-		display: block;
-	}
-
-	.fallback {
+	.pdf-status {
 		padding: 2rem;
-		color: var(--text-muted);
-		text-align: center;
-	}
-
-	.fallback a {
-		color: var(--accent);
-	}
-
-	.ios-notice {
-		padding: 2rem;
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		background: var(--surface);
 		color: var(--text-muted);
 		text-align: center;
 		font-size: 0.95rem;
+	}
+
+	.pdf-status a {
+		color: var(--accent);
+	}
+
+	.pdf-canvas-container {
+		width: 100%;
 	}
 </style>
