@@ -22,7 +22,7 @@
 				<img class="avatar u-photo" src={pfpbanner} alt="Leo" />
 				<p class="p-name name">Leo</p>
 				<p class="p-note tagline">making things fly!</p>
-				<a class="u-url u-uid" href="https://yoursite.com" rel="me" hidden>yoursite.com</a>
+				<a class="u-url u-uid" href="https://nielslarsen.dev" rel="me" hidden>nielslarsen.dev</a>
 
 				<ul class="social-links" role="list">
 					{#each links as link}
