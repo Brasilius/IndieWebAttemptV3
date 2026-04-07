@@ -7,7 +7,7 @@ imageAlt: NASA Logo
 link: https://github.com/Brasilius/PayloadRepo2026
 date: '2026-04-07'
 ---
-![NASA Logo](/src/lib/assets/NASA-LOGO.png)
+![NASA Logo](/NASA-LOGO.png)
 ## Overview
 
 NASA USLI or otherwise known as the University Student Launch Challenge, is a high powered rocketry competition in which multidisciplinary teams, design a launch vehicle and payload to accomplish a given yearly mission.
