@@ -1,3 +1,15 @@
+<script>
+	import { onMount } from 'svelte';
+
+	let isIOS = false;
+
+	onMount(() => {
+		isIOS =
+			/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+			(navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+	});
+</script>
+
 <svelte:head>
 	<title>Resume — Leo</title>
 	<meta name="description" content="Leo's resume." />
@@ -17,19 +29,25 @@
 			</a>
 		</div>
 
-		<div class="pdf-frame">
-			<object
-				data="/resume.pdf"
-				type="application/pdf"
-				width="100%"
-				height="100%"
-			>
-				<p class="fallback">
-					Your browser can't display PDFs inline.
-					<a href="/resume.pdf" download>Download the PDF</a> instead.
-				</p>
-			</object>
-		</div>
+		{#if isIOS}
+			<div class="ios-notice">
+				<p>iOS doesn't support inline PDF viewing. Use the buttons above to download or open the resume.</p>
+			</div>
+		{:else}
+			<div class="pdf-frame">
+				<object
+					data="/resume.pdf"
+					type="application/pdf"
+					width="100%"
+					height="100%"
+				>
+					<p class="fallback">
+						Your browser can't display PDFs inline.
+						<a href="/resume.pdf" download>Download the PDF</a> instead.
+					</p>
+				</object>
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -112,5 +130,15 @@
 
 	.fallback a {
 		color: var(--accent);
+	}
+
+	.ios-notice {
+		padding: 2rem;
+		border: 1px solid var(--border);
+		border-radius: var(--radius-lg);
+		background: var(--surface);
+		color: var(--text-muted);
+		text-align: center;
+		font-size: 0.95rem;
 	}
 </style>

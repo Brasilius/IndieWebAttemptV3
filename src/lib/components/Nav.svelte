@@ -106,4 +106,19 @@
 	}
 
 	ul a.active { color: var(--accent); }
+
+	@media (max-width: 480px) {
+		ul {
+			gap: 0;
+		}
+
+		ul a {
+			font-size: 0.75rem;
+			padding: 0.35rem 0.5rem;
+		}
+
+		.wordmark {
+			font-size: 0.95rem;
+		}
+	}
 </style>
