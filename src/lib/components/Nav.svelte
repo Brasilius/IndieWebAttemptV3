@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	const links = [
 		{ href: '/about',    label: 'about'    },
@@ -12,6 +13,23 @@
 	function isActive(href: string) {
 		const path = $page.url.pathname;
 		return path === href || (href !== '/' && path.startsWith(href + '/'));
+	}
+
+	let light = $state(false);
+
+	onMount(() => {
+		light = localStorage.getItem('theme') === 'light';
+		applyTheme(light);
+	});
+
+	function applyTheme(isLight: boolean) {
+		document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
+	}
+
+	function toggleTheme() {
+		light = !light;
+		localStorage.setItem('theme', light ? 'light' : 'dark');
+		applyTheme(light);
 	}
 </script>
 
@@ -31,6 +49,37 @@
 				</li>
 			{/each}
 		</ul>
+
+		<button
+			class="theme-toggle"
+			onclick={toggleTheme}
+			aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
+			aria-pressed={light}
+		>
+			<span class="track">
+				<span class="thumb">
+					{#if light}
+						<!-- sun -->
+						<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<circle cx="12" cy="12" r="4"/>
+							<line x1="12" y1="2" x2="12" y2="4"/>
+							<line x1="12" y1="20" x2="12" y2="22"/>
+							<line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+							<line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+							<line x1="2" y1="12" x2="4" y2="12"/>
+							<line x1="20" y1="12" x2="22" y2="12"/>
+							<line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+							<line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+						</svg>
+					{:else}
+						<!-- moon -->
+						<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+							<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+						</svg>
+					{/if}
+				</span>
+			</span>
+		</button>
 	</nav>
 </header>
 
@@ -106,6 +155,48 @@
 	}
 
 	ul a.active { color: var(--accent); }
+
+	/* Theme toggle */
+	.theme-toggle {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 0;
+		margin-left: 0.5rem;
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+	}
+
+	.track {
+		display: flex;
+		align-items: center;
+		width: 40px;
+		height: 22px;
+		border-radius: 99px;
+		background: var(--surface-2);
+		border: 1px solid var(--border);
+		padding: 2px;
+		transition: background var(--t), border-color var(--t);
+		position: relative;
+	}
+
+	.thumb {
+		width: 16px;
+		height: 16px;
+		border-radius: 50%;
+		background: var(--accent);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--bg);
+		transition: transform var(--t), background var(--t);
+		transform: translateX(0);
+	}
+
+	:global([data-theme="light"]) .thumb {
+		transform: translateX(18px);
+	}
 
 	@media (max-width: 480px) {
 		ul {
