@@ -23,3 +23,8 @@ placeholder
 
 ### Payload
 placeholder
+
+### Technical Challenges (of all kinds)
+
+### "lets science the S##T out of this"
+
