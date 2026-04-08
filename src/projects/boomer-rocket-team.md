@@ -10,7 +10,9 @@ date: '2026-04-09'
 ![NASA Logo](/NASA-LOGO.png)
 ## Overview
 
-[NASA USLI](https://www.nasa.gov/learning-resources/nasa-student-launch/) or otherwise known as the University Student Launch Challenge, is a rocketry competition in which multidisciplinary teams, design a high powered rocket to accomplish an objective.
+[NASA USLI](https://www.nasa.gov/learning-resources/nasa-student-launch/) or otherwise known as the University Student Launch Challenge, is a rocketry competition in which multidisciplinary teams, design a high powered rocket to accomplish an objective. In context to this year's competition I had the privilege of acting as Captain and Chief Software Architect for the Boomer Rocket Team.
+
+![Team Photo](/teamphoto.jpg)
 
 ### This years challenge
 
@@ -40,7 +42,9 @@ There were various technical requirements also involved with the process of desi
 
 ### Our approach
 
-Our approach to this challenge was an [L-1390](https://www.thrustcurve.org/motors/AeroTech/L1390G/) powered custom launch vehicle, in which we as a team designed every component used in the LV, from the body tubes, to the nose cone. We wanted to own our process and optimize it from the ground up.
+Our approach to this challenge was an [L-1390](https://www.thrustcurve.org/motors/AeroTech/L1390G/) powered custom launch vehicle, in which we as a team designed every component used in the LV, from the body tubes, to the nose cone. We wanted to own our process and optimize it from the ground up.In theory this would allow us to reduce costs, and iterate at far higher scales then what was previously possible. We also wanted to build our software stack from the ground up where possible - as this would allow the team to develop at a far greater pace and iterate quicker.
+
+I think the easiest example to provide towards this method working is involved with the cost savings with our altimeter system. Our custom stack for the altimeter was roughly~ 30$USD and provided us live telemetry - where as most off the shelf commerical solutions were 2x more expensive and did not provide live telemetry to our ground station.
 
 #### Launch Vehicle
 placeholder
