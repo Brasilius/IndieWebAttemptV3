@@ -50,12 +50,20 @@
 			{/each}
 		</ul>
 
-		<button
-			class="theme-toggle"
-			onclick={toggleTheme}
-			aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
-			aria-pressed={light}
-		>
+		<div class="controls">
+			<a href="/search" class="search-btn" aria-label="Search" class:active={isActive('/search')}>
+				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="11" cy="11" r="8"/>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"/>
+				</svg>
+			</a>
+
+			<button
+				class="theme-toggle"
+				onclick={toggleTheme}
+				aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
+				aria-pressed={light}
+			>
 			<span class="track">
 				<span class="thumb">
 					{#if light}
@@ -80,6 +88,7 @@
 				</span>
 			</span>
 		</button>
+		</div>
 	</nav>
 </header>
 
@@ -156,13 +165,38 @@
 
 	ul a.active { color: var(--accent); }
 
+	/* Controls group (search + theme toggle) */
+	.controls {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	/* Search button */
+	.search-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		border-radius: var(--radius);
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: color var(--t), background var(--t);
+	}
+
+	.search-btn:hover,
+	.search-btn.active {
+		color: var(--accent);
+		background: var(--accent-glow);
+	}
+
 	/* Theme toggle */
 	.theme-toggle {
 		background: none;
 		border: none;
 		cursor: pointer;
 		padding: 0;
-		margin-left: 0.5rem;
 		display: flex;
 		align-items: center;
 		flex-shrink: 0;
