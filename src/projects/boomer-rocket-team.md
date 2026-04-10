@@ -84,12 +84,47 @@ In functional terms, that means that we:
 ![FinalPayloadCAD](/FinalPayloadDrawing.png)
 <p align="center"><em>Final Payload Model</em></p>
 
-Our payload had to meet multiple goals as mentioned at the start of this project. Among them was the ability to physically extract soil, and contain it within the physical borders of the payload. To this end, the team decided on an auger based design, in which the center body of the payload, could rotate on its axis, and position an auger facing straight downwards.
+Our payload had to meet multiple goals as mentioned at the start of this project. Among them was the ability to physically extract 50 mL soil, and contain it within the physical borders of the payload. To this end, the team decided on an auger based design, in which the center body of the payload could rotate on its axis, and position an auger facing straight downwards. From there we had to analyze the various failure modes associated with operation of the payload.
 
-We 3D printed virtually every single component of the shell of the payload and ensured that each was validates for the performance and strain the auger was simulated and expected to go through. This meant extensive research on the physical limitations of a 3D printed drill bit. 
+![Auger](/AugerDrillBit.jpg)
+<p align="center"><em>Auger Drill Bit Failure</em></p>
 
+For instance - a unique failure mode we did not anticipate was associated with the method of production. Our first iteration of the Auger was a 3D printed variant, and when we tested it - the auger failed along the lines of the 3D print gradient. In other words a fault associated with 3D printing itself, forcing us to reconsider the process of production entirely!
+
+Taking that lesson forward, we investigated welding our own auger using metallic materials, as this avoided the 3D print gradient issue.
+
+In creating our own auger, we were able to reach the tolerances and dimensions we needed to perform at competition, as simply put - there were no commercial augers that met our specifications!
+
+![SoilTest](/SoilTesting.jpg)
+<p align="center"><em>Soil Extraction Test</em></p>
+
+As a final note before we move into the software portion, it's crucial to mention how we progressed our science experiment for the payload challenge. As the software architect, during the process of testing our soil evaluation capabilities, I came to a crucial discovery - of the three experiments we were asked to perform (and choose from) - the only process which remained scientifically accurate without needing an onboard water sample (which could complicate the dynamics of the launch), was electrical conductvity. Electrical conductivity as an experiment requires the moisture in the sample itself to remain unaffected in order to ensure that the sample is accurate - and as such bringing water with us, compromises the experiment!
+
+Again same as the original LV, we took the lessons we learned in designing and creating the payload and brought it forward to software evaluation.
 
 #### Software
+
+The software stack for this project is where the majority of my time and focus went for this team. As the only member with a solid understanding of DevOps practices and deeper experiences with Linux SBC's and Microcontrollers, I took the lead here.
+
+<div style="display: flex; justify-content: center; align-items: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;">
+  <img src="/logos/linux.svg" alt="Linux" style="height: 48px; width: auto;" />
+  <img src="/logos/python.svg" alt="Python" style="height: 48px; width: auto;" />
+  <img src="/logos/cpp.svg" alt="C++" style="height: 48px; width: auto;" />
+  <img src="/logos/raspberrypi.svg" alt="Raspberry Pi" style="height: 48px; width: auto;" />
+   <img src="/logos/Arduino.svg" alt="Arduino" style="height: 48px; width: auto;" />
+    <img src="/logos/Git.svg" alt="Git" style="height: 48px; width: auto;" />
+</div>
+
+The primary difficulty with the challenge this year, was related to how we get multiple independent systems to communicate with one another, without sacrificing mission capabilities. To this end, I'll start with introducing the chosen hardware:
+
+- Libre Computer Le Potato (Linux Single Board Computer)
+- 2x ESP32-C Dev Board V1 (RISC-V Series Microcontroller)
+- RYLR998 (Long Range Transmitter Solution)
+- AliBaba Soil Sensor (evil soil sensor with no documentation)
+- MPL3115A2 (Altimeter)
+
+The concept of operations for the software is complex, yet functional. The start of operations begins with the base station (which is thankfully the easiest portion to work with). The base station configuration is a laptop connected over serial (at 115200 baud rate)
+
 
 ### Technical Challenges (of all kinds)
 
