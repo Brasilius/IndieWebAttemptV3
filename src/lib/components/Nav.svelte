@@ -50,12 +50,20 @@
 			{/each}
 		</ul>
 
-		<button
-			class="theme-toggle"
-			onclick={toggleTheme}
-			aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
-			aria-pressed={light}
-		>
+		<div class="controls">
+			<a href="/search" class="search-btn" aria-label="Search" class:active={isActive('/search')}>
+				<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<circle cx="11" cy="11" r="8"/>
+					<line x1="21" y1="21" x2="16.65" y2="16.65"/>
+				</svg>
+			</a>
+
+			<button
+				class="theme-toggle"
+				onclick={toggleTheme}
+				aria-label={light ? 'Switch to dark mode' : 'Switch to light mode'}
+				aria-pressed={light}
+			>
 			<span class="track">
 				<span class="thumb">
 					{#if light}
@@ -80,6 +88,7 @@
 				</span>
 			</span>
 		</button>
+		</div>
 	</nav>
 </header>
 
@@ -88,13 +97,17 @@
 		position: sticky;
 		top: 0;
 		z-index: 100;
-		height: var(--nav-height);
+		height: calc(var(--nav-height) + env(safe-area-inset-top));
 		display: flex;
 		align-items: center;
+		/* solid fallback for iOS < 16.2 which doesn't support color-mix() */
+		background: var(--bg);
 		background: color-mix(in srgb, var(--bg) 80%, transparent);
 		backdrop-filter: blur(16px);
 		-webkit-backdrop-filter: blur(16px);
 		border-bottom: 1px solid var(--border);
+		/* push nav content below the notch/Dynamic Island */
+		padding-top: env(safe-area-inset-top);
 	}
 
 	nav {
@@ -156,15 +169,43 @@
 
 	ul a.active { color: var(--accent); }
 
-	/* Theme toggle */
+	/* Controls group (search + theme toggle) */
+	.controls {
+		display: flex;
+		align-items: center;
+		gap: 0.25rem;
+	}
+
+	/* Search button — 44×44 touch target (Apple HIG minimum) */
+	.search-btn {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		border-radius: var(--radius);
+		color: var(--text-muted);
+		text-decoration: none;
+		transition: color var(--t), background var(--t);
+	}
+
+	.search-btn:hover,
+	.search-btn.active {
+		color: var(--accent);
+		background: var(--accent-glow);
+	}
+
+	/* Theme toggle — 44px touch target height (Apple HIG minimum) */
 	.theme-toggle {
 		background: none;
 		border: none;
 		cursor: pointer;
-		padding: 0;
-		margin-left: 0.5rem;
+		padding: 0 4px;
+		min-width: 44px;
+		min-height: 44px;
 		display: flex;
 		align-items: center;
+		justify-content: center;
 		flex-shrink: 0;
 	}
 
@@ -198,18 +239,55 @@
 		transform: translateX(18px);
 	}
 
-	@media (max-width: 480px) {
+	/* --- Mobile nav: two-row layout so links never overflow --- */
+	@media (max-width: 600px) {
+		header {
+			height: auto;
+			min-height: calc(var(--nav-height) + env(safe-area-inset-top));
+			padding-block: 0;
+			padding-bottom: 0.35rem;
+		}
+
+		nav {
+			flex-wrap: wrap;
+			row-gap: 0.1rem;
+			padding-top: 0.5rem;
+			padding-bottom: 0.25rem;
+			/* nav is now a full-width column container */
+		}
+
+		/* Row 1: logo stays left, controls stay right */
+		.logo  { order: 0; }
+		.controls { order: 0; }
+
+		/* Row 2: links span full width, centred */
 		ul {
+			order: 1;
+			width: 100%;
+			justify-content: center;
 			gap: 0;
+			flex-wrap: wrap;
 		}
 
 		ul a {
 			font-size: 0.75rem;
-			padding: 0.35rem 0.5rem;
+			padding: 0.35rem 0.55rem;
 		}
 
 		.wordmark {
 			font-size: 0.95rem;
+		}
+	}
+
+	/* Extra-small (iPhone SE 320px) — tighten further */
+	@media (max-width: 375px) {
+		ul a {
+			font-size: 0.7rem;
+			padding: 0.3rem 0.4rem;
+		}
+
+		.wordmark {
+			font-size: 0.88rem;
 		}
 	}
 </style>

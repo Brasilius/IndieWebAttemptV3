@@ -80,6 +80,7 @@ body {
 	line-height: 1.75;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+	min-height: 100vh;       /* fallback for iOS < 15.4 */
 	min-height: 100dvh;
 	display: flex;
 	flex-direction: column;

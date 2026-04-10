@@ -40,7 +40,8 @@
 <style>
 	footer {
 		border-top: 1px solid var(--border);
-		padding-block: 2rem 2.5rem;
+		/* extra bottom padding clears the home-indicator on notched iPhones */
+		padding-block: 2rem calc(2.5rem + env(safe-area-inset-bottom));
 	}
 
 	.inner {
