@@ -9,8 +9,7 @@ date: '2026-04-09'
 ---
 <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 0.5rem; margin: 2rem 0;">
   <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
-    <source src="/videos/LVFullLaunch(trim).mov" type="video/quicktime" />
-    <source src="/videos/LVFullLaunch(trim).mov" type="video/mp4" />
+    <source src="/videos/LVFullLaunch(trim).mp4" type="video/mp4" />
   </video>
   <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
     <source src="/videos/SubScaleLaunch(trim).mp4" type="video/mp4" />
