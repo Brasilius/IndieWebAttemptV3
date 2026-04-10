@@ -7,7 +7,20 @@ imageAlt: NASA Logo
 link: https://github.com/Brasilius/PayloadRepo2026
 date: '2026-04-09'
 ---
-![NASA Logo](/NASA-LOGO.png)
+<div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 0.5rem; margin: 2rem 0;">
+  <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+    <source src="/videos/LVFullLaunch(trim).mov" type="video/quicktime" />
+    <source src="/videos/LVFullLaunch(trim).mov" type="video/mp4" />
+  </video>
+  <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
+    <source src="/videos/SubScaleLaunch(trim).mp4" type="video/mp4" />
+  </video>
+  <video autoplay muted loop playsinline style="width: 100%; grid-column: 1 / -1; object-fit: cover; border-radius: 6px; max-height: 320px;">
+    <source src="/videos/CrashTrim.mp4" type="video/mp4" />
+  </video>
+</div>
+<p align="center"><em>A story of success (and failures)</em></p>
+
 ## Overview
 
 [NASA USLI](https://www.nasa.gov/learning-resources/nasa-student-launch/) or otherwise known as the University Student Launch Challenge, is a rocketry competition in which multidisciplinary teams, design a high powered rocket to accomplish an objective. In context to this year's competition I had the privilege of acting as Captain and Chief Software Architect for the Boomer Rocket Team.
