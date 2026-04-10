@@ -123,8 +123,15 @@ The primary difficulty with the challenge this year, was related to how we get m
 - AliBaba Soil Sensor (evil soil sensor with no documentation)
 - MPL3115A2 (Altimeter)
 
-The concept of operations for the software is complex, yet functional. The start of operations begins with the base station (which is thankfully the easiest portion to work with). The base station configuration is a laptop connected over serial (at 115200 baud rate)
+The concept of operations for the software is complex, yet functional. For the purposes of explanation there are 3 fundmental systems interplaying with one another. The first is the base station, which acts as the command bridge, and the initiator of various states onboard the payload and LV respectively. The second is the nose cone electronics bay, which acts as the manual seperation point for the payload and the LV (as per NASA requirements), and finally the payload itself which hosts a variety of sensors and technology to perform its tasks.
 
+I will break down each of the subsystems independently of one another, to best come to an understanding of the finer elements of each.
+
+##### Base Station
+
+##### Nose Cone Electronics Bay
+
+##### Payload
 
 ### Technical Challenges (of all kinds)
 
