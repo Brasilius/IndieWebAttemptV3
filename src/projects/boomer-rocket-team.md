@@ -31,7 +31,7 @@ date: '2026-04-09'
 
 The challenge for this year is complex. The challenge can be broken into 2 core components. The first is the Launch Vehicle challenge, and the second is the Payload challenge.
 
-#### Launch Vehicle (LV) Challenge
+### Launch Vehicle (LV) Challenge
 
 ![rocketCad](/rocketCAD.png)
 <p align="center"><em>Rocket CAD Model</em></p>
@@ -40,7 +40,7 @@ The launch vehicle portion fundamentally challenges teams to design a predictabl
 
 For this year, we were asked to send an LV to a range between 4000 and 6000 feet, with a chosen "target [apogee](https://en.wikipedia.org/wiki/Apsis)", while also supporting a high stability margin (ensuring the rocket does not spin out) and using certified motors from commercial vendors. The team was also asked to install hardware onboard such as altimeters and gps to track the rocket. 
 
-#### Payload Challenge
+### Payload Challenge
 
 ![payloadCad](/payloadCAD.png)
 <p align="center"><em>Payload CAD Drawings</em></p>
@@ -50,7 +50,7 @@ On the other end, there is the payload challenge - which seeks to challenge stud
 Teams were asked to design a payload which can be autonomously operated in order to collect a sample of soil and evaluate it for various properties such as:
 - Soil Conductivity (our chosen experiment)
 - Nitrate Nitrite Content
-- PH
+- Ph
 
 Results then had to be wirelessly transmitted back to a base station, with time stamps.
 
@@ -60,7 +60,7 @@ There were various technical requirements also involved with the process of desi
 
 Our teams approach to this challenge, was less designing a rocket and more designing a foundation. We wanted to fundamentally control every aspect of our design, and lower dependence on outside suppliers (in other words [vertically integrate](https://www.investopedia.com/terms/v/verticalintegration.asp)) our projects wherever possible. **This led to stellar results across our stack.** By fundamentally taking control of the production and design of our stack and lowering dependence on commercial suppliers, the level of control, granularity and reproducibility of our results skyrocketed. We also saw incredible financial benefits from vertically integrating - lowering the cost of several subsystems by upwards of *3x*...
 
-#### Launch Vehicle
+### Launch Vehicle
 Our approach to this challenge was an [L-1390](https://www.thrustcurve.org/motors/AeroTech/L1390G/) powered custom launch vehicle. To begin this portion, we had several design goals with the LV this year, involving the vertical integration mentioned prior. Some of those are listed below:
 - Fully Carbon Fiber Tubes
 - Custom Nose Cone Geometry and Design
@@ -83,7 +83,7 @@ The weight reduction was due to a non-critical manufacturing defect involving bl
 
 As can be seen above, our Full Scale LV was successfully manufactured, and is a genuine beauty of carbon fiber. We look forward to taking the lessons we learned with manufacturing here and taking them into the next competition year.
 
-#### Payload
+### Payload
 
 Following the ideas of vertical integration, our payload took much of the same approach - which was lowering reliance on external suppliers and factors as much as physically possible.
 
@@ -114,7 +114,7 @@ As a final note before we move into the software portion, it's crucial to mentio
 
 Again same as the original LV, we took the lessons we learned in designing and creating the payload and brought it forward to software evaluation.
 
-#### Software
+### Software
 
 The software stack for this project is where the majority of my time and focus went for this team. As the only member with a solid understanding of DevOps practices and deeper experiences with Linux SBC's and Microcontrollers, I took the lead here.
 
@@ -139,11 +139,103 @@ The concept of operations for the software is complex, yet functional. For the p
 
 I will break down each of the subsystems independently of one another, to best come to an understanding of the finer elements of each.
 
-##### Base Station
+### Base Station
 
-##### Nose Cone Electronics Bay
+The base station for the project, can be boiled down to a microcontroller connected to a LoRa transmitter via SPI, while simulatenously being connected over serial to a laptop for active telemetry. The following code block shows how we intialize the LoRa module - this code struture is recurrent across the project - the RYLR998 relies on AT+ commands to write to its flash memory - and this is how we address various requirements around wireless communication (most notably, the frequency requirement from NASA for 914.5 mHz). This AT Command structure is also how we differentiate between various boards and operating systems. The transmitter itself needs to specify a network address as well as a hardware address. In essence, the network address is what allows for the board to identify other boards in the network, and the hardware address is how you choose what board you want to communicate with.This effectively makes the host operating system or programming of the reciever irrelevant as the transmitter structure itself handles the communication and all a developer needs to do is handle piping the information away from the transmitter.
 
-##### Payload
+```cpp
+void setup() {
+  Serial.begin(115200);
+
+  delay(3000);
+  Serial.println();
+  Serial.println("----------------------------------------");
+  Serial.println("   BASE STATION STARTING...");
+  Serial.println("----------------------------------------");
+
+  // Start LoRa Serial
+  LoRaSerial.begin(115200, SERIAL_8N1, RX_PIN, TX_PIN);
+
+  // Reset LoRa Module
+  pinMode(RST_PIN, OUTPUT);
+  digitalWrite(RST_PIN, HIGH); delay(100);
+  digitalWrite(RST_PIN, LOW);  delay(100);
+  digitalWrite(RST_PIN, HIGH); delay(1000);
+
+  // Configure LoRa
+  sendATCommand("AT");
+  delay(500);
+  sendATCommand("AT+BAND=914500000"); // 914.5 MHz per NASA requirements
+  delay(500);
+  sendATCommand("AT+ADDRESS=" + String(LOCAL_ADDRESS));
+  delay(500);
+  sendATCommand("AT+NETWORKID=" + String(NETWORK_ID));
+  delay(500);
+
+  printMenu();
+}
+```
+From there, we begin uncovering the mission flow. Each of the three systems, from base station, nose cone bay, and payload - operates in different modes depending on what's happening during the mission. For example, the payload isn't doing anything while the rocket is in flight, but once it's on the ground and receives the right command, it kicks into action. These modes (or "states") and the events that trigger them are what drive the entire software architecture, so understanding that concept is crucial to developing an understanding of what the base station is actually "doing". A critical aspect of what NASA enforces is accountability and manual action - and therefore they heavily warn against automatic state transitions due to the risk of a untimely transition causing an accident. The base station in this acts as the absolute authority over the other two systems involved in this mission, and determines whether or not they transition or not. 
+
+```cpp
+void printMenu() {
+  Serial.println();
+  Serial.println("----------------------------------------");
+  Serial.println("   SYSTEM READY");
+  Serial.println("   Type '1' for Separation Command (Board 3)");
+  Serial.println("   Type '2' for Initialize Payload  (Board 4)");
+  Serial.println("   Type '3' to Enter Telemetry Listener Mode");
+  Serial.println("----------------------------------------");
+}
+```
+As can be seen above this is how we differentiate different states for the base station - there are more internal to each system to consider, and we'll go over those as we approach those subsystems.
+
+Lastly - I wanted to cover the actual process of sending messages and what that looks like from a data perspective.
+
+```cpp
+// -----------------------------------------------------------------------
+// Parses incoming sensor packet from Board 3
+// Expected payload format: "ALT:xxx.xx,PRES:xxxxx.xx,TEMP:xx.xx"
+// Full RCV format: +RCV=<SenderID>,<Len>,<Data>,<RSSI>,<SNR>
+// -----------------------------------------------------------------------
+void parseSensorPacket(String raw) {
+  String body = raw.substring(5);
+
+  int firstComma  = body.indexOf(',');
+  int secondComma = body.indexOf(',', firstComma + 1);
+  int lastComma   = body.lastIndexOf(',');
+  int secondLast  = body.lastIndexOf(',', lastComma - 1);
+
+  if (firstComma < 0 || secondComma < 0 || lastComma < 0 || secondLast < 0) {
+    Serial.print("[RAW PACKET]: ");
+    Serial.println(raw);
+    return;
+  }
+
+  String senderID = body.substring(0, firstComma);
+  String payload  = body.substring(secondComma + 1, secondLast);
+  String rssi     = body.substring(secondLast + 1, lastComma);
+  String snr      = body.substring(lastComma + 1);
+
+  float altitude    = extractValue(payload, "ALT:");
+  float pressure    = extractValue(payload, "PRES:");
+  float temperature = extractValue(payload, "TEMP:");
+
+  Serial.println();
+  Serial.println("--- TELEMETRY FROM BOARD " + senderID + " ---");
+  Serial.print("   Altitude    : "); Serial.print(altitude,    2); Serial.println(" m");
+  Serial.print("   Pressure    : "); Serial.print(pressure,    2); Serial.println(" Pa");
+  Serial.print("   Temperature : "); Serial.print(temperature, 2); Serial.println(" C");
+  Serial.print("   RSSI        : "); Serial.print(rssi);           Serial.println(" dBm");
+  Serial.print("   SNR         : "); Serial.print(snr);            Serial.println(" dB");
+  Serial.println("-------------------------------");
+```
+
+This portion of the software does the parsing needed to make the stream of data coming into the software readable by a ground operator. Its crucial to make it as readable as possible to ensure that the operator (regardless of technical background) can interpret the results and make decisions.
+
+### Nose Cone Electronics Bay
+
+### Payload
 
 ### Technical Challenges (of all kinds)
 
