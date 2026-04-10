@@ -9,16 +9,17 @@ date: '2026-04-09'
 ---
 <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; gap: 0.5rem; margin: 2rem 0;">
   <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
-    <source src="/videos/LVFullLaunch.mov" type="video/quicktime" />
-    <source src="/videos/LVFullLaunch.mov" type="video/mp4" />
+    <source src="/videos/LVFullLaunch(trim).mov" type="video/quicktime" />
+    <source src="/videos/LVFullLaunch(trim).mov" type="video/mp4" />
   </video>
   <video autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;">
-    <source src="/videos/SubScaleLaunch.mp4" type="video/mp4" />
+    <source src="/videos/SubScaleLaunch(trim).mp4" type="video/mp4" />
   </video>
   <video autoplay muted loop playsinline style="width: 100%; grid-column: 1 / -1; object-fit: cover; border-radius: 6px; max-height: 320px;">
     <source src="/videos/CrashTrim.mp4" type="video/mp4" />
   </video>
 </div>
+<p align="center"><em>A story of success (and failures)</em></p>
 
 ## Overview
 
