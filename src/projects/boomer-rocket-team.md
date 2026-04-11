@@ -74,7 +74,7 @@ For instance with regards to the carbon fiber tubes, we constructed an open sour
 ![Winding Machine](/WindingMachine.JPG)
 <p align="center"><em>"Contraption" Open Source Winding Machine</em></p>
 
-Doing this allowed us to produce carbon fiber tubes at a genuine **fraction** of the price that they normally are. The cost reduction aligned somewhere in the range **3x**, and that's a conservative estimate. The team has been able to procure high quality carbon fiber tows for less than a hundred dollars making the reduction closer to **5x - 6x**. We were also very successful in other ways - initial testing and weight assessments showed that our tubes maintained rigidity while also being close to 6 lbs lighter than initially estimated. 
+Doing this allowed us to produce carbon fiber tubes at a genuine **fraction** of the price that they normally are. The cost reduction aligned somewhere in the range **3x**, and that's a conservative estimate. The team has been able to procure high quality carbon fiber tows for less than a hundred dollars making the reduction closer to **5x - 6x** (this process also applied to onboard electronics covered later, where we also achieved similar cost reductions with improved performance too!). We were also very successful in other ways - initial testing and weight assessments showed that our tubes maintained rigidity while also being close to 6 lbs lighter than initially estimated. 
 
 The weight reduction was due to a non-critical manufacturing defect involving blue tube and the mandrel, and was later incorporated into official production thanks to the benefits!
 
@@ -228,12 +228,14 @@ void parseSensorPacket(String raw) {
   Serial.print("   Temperature : "); Serial.print(temperature, 2); Serial.println(" C");
   Serial.print("   RSSI        : "); Serial.print(rssi);           Serial.println(" dBm");
   Serial.print("   SNR         : "); Serial.print(snr);            Serial.println(" dB");
-  Serial.println("-------------------------------");
+  Serial.println("-------------------------------");}
 ```
 
-This portion of the software does the parsing needed to make the stream of data coming into the software readable by a ground operator. Its crucial to make it as readable as possible to ensure that the operator (regardless of technical background) can interpret the results and make decisions.
+This portion of the software does the parsing needed to make the stream of data coming into the software readable by a ground operator. Its crucial to make it as readable as possible to ensure that the operator (regardless of technical background) can interpret the results and make decisions. We use the parseSensorPacket function to grab the data, and then translate it to human ready language.
 
 ### Nose Cone Electronics Bay
+
+
 
 ### Payload
 
