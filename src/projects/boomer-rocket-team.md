@@ -74,7 +74,7 @@ For instance with regards to the carbon fiber tubes, we constructed an open sour
 ![Winding Machine](/WindingMachine.JPG)
 <p align="center"><em>"Contraption" Open Source Winding Machine</em></p>
 
-Doing this allowed us to produce carbon fiber tubes at a genuine **fraction** of the price that they normally are. The cost reduction aligned somewhere in the range **3x**, and that's a conservative estimate. The team has been able to procure high quality carbon fiber tows for less than a hundred dollars making the reduction closer to **5x - 6x**. We were also very successful in other ways - initial testing and weight assessments showed that our tubes maintained rigidity while also being close to 6 lbs lighter than initially estimated. 
+Doing this allowed us to produce carbon fiber tubes at a genuine **fraction** of the price that they normally are. The cost reduction aligned somewhere in the range **3x**, and that's a conservative estimate. The team has been able to procure high quality carbon fiber tows for less than a hundred dollars making the reduction closer to **5x - 6x** (From 350$+ to 40$ on the cheap end!). We were also very successful in other ways - initial testing and weight assessments showed that our tubes maintained rigidity while also being close to 6 lbs lighter than initially estimated. 
 
 The weight reduction was due to a non-critical manufacturing defect involving blue tube and the mandrel, and was later incorporated into official production thanks to the benefits!
 
@@ -85,7 +85,7 @@ As can be seen above, our Full Scale LV was successfully manufactured, and is a 
 
 ### Payload
 
-Following the ideas of vertical integration, our payload took much of the same approach - which was lowering reliance on external suppliers and factors as much as physically possible.
+Our payload took much of the same approach we used for the LV - which was lowering reliance on external suppliers and factors as much as physically possible, in favor of internally tested and developed solutions.
 
 In functional terms, that means that we:
 - Designed our own soil extraction system
@@ -127,113 +127,39 @@ The software stack for this project is where the majority of my time and focus w
     <img src="/logos/Git.svg" alt="Git" style="height: 48px; width: auto;" />
 </div>
 
-The primary difficulty with the challenge this year, was related to how we get multiple independent systems to communicate with one another, without sacrificing mission capabilities. To this end, I'll start with introducing the chosen hardware:
+To begin software, I think it makes sense to explain the underlying concept that drove the development of the software to where it is now. 
 
-- Libre Computer Le Potato (Linux Single Board Computer)
-- 2x ESP32-C Dev Board V1 (RISC-V Series Microcontroller)
-- RYLR998 (Long Range Transmitter Solution)
-- AliBaba Soil Sensor (evil soil sensor with no documentation)
-- MPL3115A2 (Altimeter)
+[Finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine) (or FSMs as we're going to refer to them from now on) are a mathematical model of computation in which a machine can exist in exactly one state of many states. States in this context refer to things like "low power mode" on your phone - basically its just ensuring that your hardware is solely focused on accomplishing one task at a time where possible.
 
-The concept of operations for the software is complex, yet functional. For the purposes of explanation there are 3 fundmental systems interplaying with one another. The first is the base station, which acts as the command bridge, and the initiator of various states onboard the payload and LV respectively. The second is the nose cone electronics bay, which acts as the manual seperation point for the payload and the LV (as per NASA requirements), and finally the payload itself which hosts a variety of sensors and technology to perform its tasks.
+For our project, we identified that several subsystems onboard the rocket had to use state machines for a variety of crucial reasons - but most critical among them was NASA's accountability requirement. NASA prohibits automatic state transitions, as to ensure that teams have as much control as physically possible on LV operations - especially when it comes to releasing a separated payload. The ability to abort a separation is just as important as the ability to separate.
 
-I will break down each of the subsystems independently of one another, to best come to an understanding of the finer elements of each.
+
+With all that in mind, I think its appropriate to begin introducing the hardware based on subsystem.
 
 ### Base Station
 
-The base station for the project, can be boiled down to a microcontroller connected to a LoRa transmitter via SPI, while simulatenously being connected over serial to a laptop for active telemetry. The following code block shows how we intialize the LoRa module - this code struture is recurrent across the project - the RYLR998 relies on AT+ commands to write to its flash memory - and this is how we address various requirements around wireless communication (most notably, the frequency requirement from NASA for 914.5 mHz). This AT Command structure is also how we differentiate between various boards and operating systems. The transmitter itself needs to specify a network address as well as a hardware address. In essence, the network address is what allows for the board to identify other boards in the network, and the hardware address is how you choose what board you want to communicate with.This effectively makes the host operating system or programming of the reciever irrelevant as the transmitter structure itself handles the communication and all a developer needs to do is handle piping the information away from the transmitter.
+The base station hardware wise, is the least complex system in the stack - composed of just an Esp32, a RYLR998 LoRa Transceiver and a USB-C cable to your laptop. 
 
-```cpp
-void setup() {
-  Serial.begin(115200);
+Similarly the software is also very simple by comparison. We can fundamentally divide the operation of the base station into 4 seperate states - and this defines the code structure by proxy.
 
-  delay(3000);
-  Serial.println();
-  Serial.println("----------------------------------------");
-  Serial.println("   BASE STATION STARTING...");
-  Serial.println("----------------------------------------");
+- State 1: Listener (Link to Payload Separator)
+- State 2: Sender (Link to Payload Separator)
+- State 3: Sender (Link to Payload)
+- State 4: Listener (Link to Payload)
 
-  // Start LoRa Serial
-  LoRaSerial.begin(115200, SERIAL_8N1, RX_PIN, TX_PIN);
 
-  // Reset LoRa Module
-  pinMode(RST_PIN, OUTPUT);
-  digitalWrite(RST_PIN, HIGH); delay(100);
-  digitalWrite(RST_PIN, LOW);  delay(100);
-  digitalWrite(RST_PIN, HIGH); delay(1000);
+#### Testing
 
-  // Configure LoRa
-  sendATCommand("AT");
-  delay(500);
-  sendATCommand("AT+BAND=914500000"); // 914.5 MHz per NASA requirements
-  delay(500);
-  sendATCommand("AT+ADDRESS=" + String(LOCAL_ADDRESS));
-  delay(500);
-  sendATCommand("AT+NETWORKID=" + String(NETWORK_ID));
-  delay(500);
+ During the timeline of development, we wanted to verify the capabilities of our hardware, and given the fact that were students - we chose the easiest way to do that. We had one team of people stay in the middle of a field (with a base station) and another group of people drive the other way in a car. 
 
-  printMenu();
-}
-```
-From there, we begin uncovering the mission flow. Each of the three systems, from base station, nose cone bay, and payload - operates in different modes depending on what's happening during the mission. For example, the payload isn't doing anything while the rocket is in flight, but once it's on the ground and receives the right command, it kicks into action. These modes (or "states") and the events that trigger them are what drive the entire software architecture, so understanding that concept is crucial to developing an understanding of what the base station is actually "doing". A critical aspect of what NASA enforces is accountability and manual action - and therefore they heavily warn against automatic state transitions due to the risk of a untimely transition causing an accident. The base station in this acts as the absolute authority over the other two systems involved in this mission, and determines whether or not they transition or not. 
+ **here is where me being raised in a European family accidentally worked in our favor** - during the design and selection process - I misheard 2000 feet for 2000 meters, and designed the system to be able to communicate at those ranges. This of course, was *blatant* overkill for the project - but im not complaining about the results. 
 
-```cpp
-void printMenu() {
-  Serial.println();
-  Serial.println("----------------------------------------");
-  Serial.println("   SYSTEM READY");
-  Serial.println("   Type '1' for Separation Command (Board 3)");
-  Serial.println("   Type '2' for Initialize Payload  (Board 4)");
-  Serial.println("   Type '3' to Enter Telemetry Listener Mode");
-  Serial.println("----------------------------------------");
-}
-```
-As can be seen above this is how we differentiate different states for the base station - there are more internal to each system to consider, and we'll go over those as we approach those subsystems.
+ We achieved a 100% recieve rate (no packets lost) while one reciever was in a moving car, with no line of sight - basically showing that we were in a faraday cage environment at over a kilometer away and still able to perform the needed duties of the project.
 
-Lastly - I wanted to cover the actual process of sending messages and what that looks like from a data perspective.
-
-```cpp
-// -----------------------------------------------------------------------
-// Parses incoming sensor packet from Board 3
-// Expected payload format: "ALT:xxx.xx,PRES:xxxxx.xx,TEMP:xx.xx"
-// Full RCV format: +RCV=<SenderID>,<Len>,<Data>,<RSSI>,<SNR>
-// -----------------------------------------------------------------------
-void parseSensorPacket(String raw) {
-  String body = raw.substring(5);
-
-  int firstComma  = body.indexOf(',');
-  int secondComma = body.indexOf(',', firstComma + 1);
-  int lastComma   = body.lastIndexOf(',');
-  int secondLast  = body.lastIndexOf(',', lastComma - 1);
-
-  if (firstComma < 0 || secondComma < 0 || lastComma < 0 || secondLast < 0) {
-    Serial.print("[RAW PACKET]: ");
-    Serial.println(raw);
-    return;
-  }
-
-  String senderID = body.substring(0, firstComma);
-  String payload  = body.substring(secondComma + 1, secondLast);
-  String rssi     = body.substring(secondLast + 1, lastComma);
-  String snr      = body.substring(lastComma + 1);
-
-  float altitude    = extractValue(payload, "ALT:");
-  float pressure    = extractValue(payload, "PRES:");
-  float temperature = extractValue(payload, "TEMP:");
-
-  Serial.println();
-  Serial.println("--- TELEMETRY FROM BOARD " + senderID + " ---");
-  Serial.print("   Altitude    : "); Serial.print(altitude,    2); Serial.println(" m");
-  Serial.print("   Pressure    : "); Serial.print(pressure,    2); Serial.println(" Pa");
-  Serial.print("   Temperature : "); Serial.print(temperature, 2); Serial.println(" C");
-  Serial.print("   RSSI        : "); Serial.print(rssi);           Serial.println(" dBm");
-  Serial.print("   SNR         : "); Serial.print(snr);            Serial.println(" dB");
-  Serial.println("-------------------------------");
-```
-
-This portion of the software does the parsing needed to make the stream of data coming into the software readable by a ground operator. Its crucial to make it as readable as possible to ensure that the operator (regardless of technical background) can interpret the results and make decisions.
 
 ### Nose Cone Electronics Bay
+
+
 
 ### Payload
 
