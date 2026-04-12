@@ -10,7 +10,8 @@ Matcha-green palette, markdown-based posts and projects, microformats2 markup (h
 - **Markdown** — mdsvex (`.md` files compile to Svelte components, smartypants enabled)
 - **Styling** — Custom CSS with design tokens in `src/app.css`
 - **Fonts** — Inter (body) + IBM Plex Mono (code/accents) via Google Fonts
-- **Analytics** — Vercel Web Analytics (`@vercel/analytics`)
+- **Analytics** — Vercel Web Analytics + Speed Insights (`@vercel/analytics`, `@vercel/speed-insights`)
+- **PDF rendering** — pdfjs-dist (resume page)
 
 ## Pages
 
@@ -24,6 +25,7 @@ Matcha-green palette, markdown-based posts and projects, microformats2 markup (h
 | `/about` | About + h-card |
 | `/now` | /now page |
 | `/resume` | Resume |
+| `/search` | Full-text search across posts |
 
 ## Adding a post
 
@@ -76,6 +78,16 @@ Type-check:
 npm run check
 ```
 
+## OG Image
+
+The static OG image (`static/og-image.png`) is generated via ImageMagick:
+
+```sh
+npm run generate-og
+```
+
+Requires ImageMagick (`magick` / `convert`) to be installed. The script lives in `scripts/generate-og.mjs` and produces a 1200×630 PNG for Open Graph / iMessage previews.
+
 ## Build & Deploy
 
 ```sh
@@ -84,3 +96,14 @@ npm run preview
 ```
 
 The project uses `@sveltejs/adapter-auto` and is deployed on Vercel. To deploy elsewhere, swap the adapter in `svelte.config.js` for the one matching your host (Netlify, Node, static, etc.).
+
+## Docker
+
+A multi-stage `Dockerfile` is included for containerised deployments:
+
+```sh
+docker build -t indieweb .
+docker run -p 3000:3000 indieweb
+```
+
+The build stage compiles the app; the runtime stage copies only the `build/` output and production dependencies, keeping the image lean.

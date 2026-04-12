@@ -165,10 +165,19 @@ The nose cone brought a whole new host of issues into the mix. Fon one - on top 
 
 ### Payload
 
+The payload is the most complex software system onboard the Launch Vehicle - and broadly across the entire project. 
+
+It functions through the benefits provided by using a Linux single board computer. We used a custom version of ```Raspbian``` OS. 
+
+Because this is a fully functional operating system, we are able to take advantage of multi-threading our programs. 
+
+
 #### Testing
 Testing the payload involved 2 distinct branches 
 #### Soil Evaluation
 Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
+
+
 
 ### Failure Analysis
 
