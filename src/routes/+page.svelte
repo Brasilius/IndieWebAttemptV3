@@ -9,6 +9,9 @@
 <svelte:head>
 	<title>Leo — making things fly!</title>
 	<meta name="description" content="Personal site and digital garden." />
+	<meta property="og:title" content="Leo — making things fly!" />
+	<meta property="og:description" content="Aerospace engineer by trade, computer enthusiast by passion." />
+	<meta property="og:url" content="https://nielslarsen.dev/" />
 </svelte:head>
 
 <div class="container">
