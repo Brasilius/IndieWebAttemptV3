@@ -16,10 +16,15 @@
 	}
 
 	let light = $state(false);
+	let navList: HTMLUListElement;
 
 	onMount(() => {
 		light = localStorage.getItem('theme') === 'light';
 		applyTheme(light);
+
+		// Scroll the active link into view so the current page is always visible
+		const active = navList?.querySelector<HTMLAnchorElement>('a.active');
+		active?.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'instant' });
 	});
 
 	function applyTheme(isLight: boolean) {
@@ -40,7 +45,7 @@
 			<span class="wordmark">leo<span class="accent">.</span></span>
 		</a>
 
-		<ul role="list">
+		<ul role="list" bind:this={navList}>
 			{#each links as link}
 				<li>
 					<a href={link.href} class:active={isActive(link.href)}>
@@ -239,51 +244,62 @@
 		transform: translateX(18px);
 	}
 
-	/* --- Mobile nav: two-row layout so links never overflow --- */
+	/* --- Mobile nav: single-row with horizontally scrollable links --- */
 	@media (max-width: 600px) {
-		header {
-			height: auto;
-			min-height: calc(var(--nav-height) + env(safe-area-inset-top));
-			padding-block: 0;
-			padding-bottom: 0.35rem;
-		}
-
 		nav {
-			flex-wrap: wrap;
-			row-gap: 0.1rem;
-			padding-top: 0.5rem;
-			padding-bottom: 0.25rem;
-			/* nav is now a full-width column container */
-		}
-
-		/* Row 1: logo stays left, controls stay right */
-		.logo  { order: 0; }
-		.controls { order: 0; }
-
-		/* Row 2: links span full width, centred */
-		ul {
-			order: 1;
-			width: 100%;
-			justify-content: center;
+			flex-wrap: nowrap;
 			gap: 0;
-			flex-wrap: wrap;
-		}
-
-		ul a {
-			font-size: 0.75rem;
-			padding: 0.35rem 0.55rem;
 		}
 
 		.wordmark {
 			font-size: 0.95rem;
+		}
+
+		/* Scrollable link strip */
+		ul {
+			flex: 1;
+			min-width: 0; /* allow flex child to shrink below content size */
+			flex-wrap: nowrap;
+			justify-content: flex-start;
+			gap: 0;
+			overflow-x: auto;
+			overflow-y: hidden;
+			/* hide the scrollbar on all browsers */
+			scrollbar-width: none;
+			-ms-overflow-style: none;
+			/* subtle fade at both edges to hint at swipeable content */
+			-webkit-mask-image: linear-gradient(
+				to right,
+				transparent 0%,
+				black 8%,
+				black 85%,
+				transparent 100%
+			);
+			mask-image: linear-gradient(
+				to right,
+				transparent 0%,
+				black 8%,
+				black 85%,
+				transparent 100%
+			);
+		}
+
+		ul::-webkit-scrollbar {
+			display: none;
+		}
+
+		ul a {
+			font-size: 0.78rem;
+			padding: 0.35rem 0.6rem;
+			white-space: nowrap;
 		}
 	}
 
 	/* Extra-small (iPhone SE 320px) — tighten further */
 	@media (max-width: 375px) {
 		ul a {
-			font-size: 0.7rem;
-			padding: 0.3rem 0.4rem;
+			font-size: 0.73rem;
+			padding: 0.3rem 0.5rem;
 		}
 
 		.wordmark {
