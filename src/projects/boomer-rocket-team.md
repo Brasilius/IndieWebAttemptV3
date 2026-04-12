@@ -118,6 +118,8 @@ Again same as the original LV, we took the lessons we learned in designing and c
 
 The software stack for this project is where the majority of my time and focus went for this team. As the only member with a solid understanding of DevOps practices and deeper experiences with Linux SBC's and Microcontrollers, I took the lead here.
 
+As a quick note - all source code can be viewed [here](https://github.com/Brasilius/PayloadRepo2026).
+
 <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;">
   <img src="/logos/linux.svg" alt="Linux" style="height: 48px; width: auto;" />
   <img src="/logos/python.svg" alt="Python" style="height: 48px; width: auto;" />
@@ -159,11 +161,16 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 
 ### Nose Cone Electronics Bay
 
-The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively simply.
+The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively 
 
 ### Payload
 
-### Technical Challenges (of all kinds)
+#### Testing
+Testing the payload involved 2 distinct branches 
+#### Soil Evaluation
+Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
 
-### Did it pay off?
+### Failure Analysis
+
+### Conclusion
 
