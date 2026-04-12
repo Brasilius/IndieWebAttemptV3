@@ -159,7 +159,7 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 
 ### Nose Cone Electronics Bay
 
-
+The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively simply.
 
 ### Payload
 
