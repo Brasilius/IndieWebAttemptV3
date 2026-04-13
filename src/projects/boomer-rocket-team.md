@@ -161,7 +161,9 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 
 ### Nose Cone Electronics Bay
 
-The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively 
+The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively simple however required alot of manual tinkering
+
+The purpose of the nose cone electronics were to be a manual seperator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter.
 
 ### Payload
 
@@ -169,7 +171,24 @@ The payload is the most complex software system onboard the Launch Vehicle - and
 
 It functions through the benefits provided by using a Linux single board computer. We used a custom version of ```Raspbian``` OS. 
 
-Because this is a fully functional operating system, we are able to take advantage of multi-threading our programs. 
+Because this is a fully functional operating system, we are able to take advantage of multi-threading. 
+
+Multi-threading in this context refers to the ability to run multiple programs concurrently - which as far as the Esp32 setups are concerned is not possible. We used the ```Threading``` and ```Subprocess``` modules on Python (via UV by astral) to create a Python orchestration layer that can call subserviant c++ helper functions. This means that we get the ease and simplicity of python for the logic that dictates the payload finite state machine, while retaining the speed and performance requirements derived from the hardware from c++.
+
+There are currently 4 C++ helper programs that we run concurrent to the orchestrator:
+
+- transmitter.cpp
+- receiver.cpp
+- modbus.cpp
+- motor.cpp
+
+Each of these dictate a seperate process that needs to be managed or called by the state machine. The standard run time for the project can be boiled down to the following:
+
+- Python orchestrator is started via ```uv run main.py```
+- ```main.py``` starts a ```thread``` for receiving data packets and listens constantly
+- Upon receiving a signal, ```motor.cpp``` is called and begins extracting soil.
+- When soil and motor are situated inside the payload, ```modbus.cpp``` is called, and the soil data is loaded into the ```buffer``` of the python program.
+- Then the ```transmitter.cpp``` program is called and sends the data to the base station.
 
 
 #### Testing
