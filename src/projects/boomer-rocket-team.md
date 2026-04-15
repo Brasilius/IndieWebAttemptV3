@@ -192,9 +192,16 @@ Each of these dictate a seperate process that needs to be managed or called by t
 
 
 #### Testing
-Testing the payload involved 2 distinct branches 
+
+Testing the payload involved 2 distinct branches across hardware and software testing.
+
+Software testing in context to the payload refers to the ability to verify edge case scenarios as far as inputs are concerned and challenging the fundamental boundaries of the code. For instance 
+
+
 #### Soil Evaluation
 Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
+
+There were 2 key concepts to unlocking the power of the sensor itself - and that was the interogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and commmand the sensor.
 
 
 
