@@ -207,7 +207,13 @@ There were 2 key concepts to unlocking the power of the sensor itself - and that
 
 ### Failure Analysis
 
-Failure analysis around our second full scale launch was extensive. The analysis began with extensive data comparison from both launches - since on the surface level we understood the differences between each launch to be minimal. 
+Failure analysis around our second full scale launch was extensive and begain with a huge amount of retroactive video playback. To begin analyzing why the rocket crashed we had to understand the underlying physics that led to the crash to begin with.
+
+<div align="center">   
+    <img src="\RocketStabilityLoss.png" alt="Rocket Stability Loss">                                    
+  </div>                                   
+<p align="center"><em>Rocket Stability Loss</em></p>
+Across aerospace, an incredibly important concept to the development of a vehicle is static stabiilty. 
 
 ### Conclusion
 
