@@ -92,8 +92,9 @@ In functional terms, that means that we:
 - Manufactured our soil extraction system in-house
 - Validated and tested the design
 - Extensively built hardware where possible
-
-![FinalPayloadCAD](/FinalPayloadDrawing.png)
+<div align="center">   
+    <img src="\FinalPayloadDrawing.png" alt="Final Payload Model">                                    
+  </div>                                   
 <p align="center"><em>Final Payload Model</em></p>
 
 Our payload had to meet multiple goals as mentioned at the start of this project. Among them was the ability to physically extract 50 mL soil, and contain it within the physical borders of the payload. To this end, the team decided on an auger based design, in which the center body of the payload could rotate on its axis, and position an auger facing straight downwards. From there we had to analyze the various failure modes associated with operation of the payload.
@@ -213,7 +214,8 @@ Failure analysis around our second full scale launch was extensive and begain wi
     <img src="\RocketStabilityLoss.png" alt="Rocket Stability Loss">                                    
   </div>                                   
 <p align="center"><em>Rocket Stability Loss</em></p>
-Across aerospace, an incredibly important concept to the development of a vehicle is static stabiilty. 
+
+Across aerospace, an incredibly important concept to the development of a vehicle is static stability. 
 
 ### Conclusion
 
