@@ -207,5 +207,7 @@ There were 2 key concepts to unlocking the power of the sensor itself - and that
 
 ### Failure Analysis
 
+Failure analysis around our second full scale launch was extensive. The analysis began with extensive data comparison from both launches - since on the surface level we understood the differences between each launch to be minimal. 
+
 ### Conclusion
 
