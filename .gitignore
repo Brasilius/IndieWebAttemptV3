@@ -7,7 +7,7 @@ node_modules
 .wrangler
 /.svelte-kit
 /build
-/package-lock.json
+
 
 # OS
 .DS_Store
@@ -26,4 +26,3 @@ vite.config.ts.timestamp-*
 #JUST TO BE DOUBLE SURE.
 node_modules/
 .svelte-kit/
-package-lock.json

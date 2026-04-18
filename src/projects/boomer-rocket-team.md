@@ -164,7 +164,8 @@ Essentially, each state determines the mode of operation for base station - whic
 
 ### Nose Cone Electronics Bay
 
-The nose cone brought a whole new host of issues into the mix. For one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relatively simple however required a lot of manual tinkering
+The nose cone brought a whole new host of issues into the mix. For one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relatively simple however required a lot of manual tinkering. 
+
 
 The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter. 
 
@@ -196,7 +197,7 @@ Each of these dictate a separate process that needs to be managed or called by t
 - Then the ```transmitter.cpp``` program is called and sends the data to the base station.
 - From there the base station configures a ```javascript``` dashboard native in the browser to show the information live to an operator!
 
-
+Fundamentally what I wanted to achieve with a python orchestration layer was fairly simple - operational simplicity without incurring the technical debt from trying to make python something it just isn't. By using C++ helper functions we get to maintain operational simplicity without sacrificing the runtime speed of a pre-compiled language like C++.
 
 #### Testing
 
@@ -245,4 +246,4 @@ Ultimately the conclusion that we had come too was that the failure was due to a
 
 ### Conclusion
 
-Although we could not attend Huntsville, Alabama to launch our rocket due to a combination of supply chain constraints and the timing of the rocket crash - we still achieved every single goal we wanted to achieve with this team. We vertically integrated our entire tech stack, lowering costs and increasing capability for both our team and future teams coming out of OU. We achieved the insitutional changes we wanted for our team, through extensive work with current OU adminstration - and ultimately we learned the most from our failures. We learned that we needed to secure an incredibly robust supply chain to ensure we have the resources to rebuild if a catastrophic launch occurs again. 
+Although we could not attend Huntsville, Alabama to launch our rocket due to a combination of supply chain constraints and the timing of the rocket crash - we still achieved every single goal we wanted to achieve with this team. The team built tooling that will last generations of students, permanently lowering the cost of carbon fiber manufacturing by a massive margin. We designed embedded systems that far outperformed commercial counterparts, with safety built in as the priority, not secondary. 
