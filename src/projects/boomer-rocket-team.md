@@ -164,7 +164,9 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 
 The nose cone brought a whole new host of issues into the mix. For one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relatively simple however required a lot of manual tinkering
 
-The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter.
+The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter. 
+
+We designed this system with an I2C Altimeter and a standard UART LoRa Transceiver, all wired in tandem to an ESP32. We also connected via a logic level mostfett, an E-Match powered wire cutter. Essentially following the concept of operations, once a ground operator recieved a read out indicating that a certain altitude had been reached, they could fire the e-match and seperate the payload for a full deployment. 
 
 ### Payload
 
@@ -196,13 +198,13 @@ Each of these dictate a separate process that needs to be managed or called by t
 
 Testing the payload involved 2 distinct branches across hardware and software testing.
 
-Software testing in context to the payload refers to the ability to verify edge case scenarios as far as inputs are concerned and challenging the fundamental boundaries of the code. For instance 
+Software testing in context to the payload refers to the ability to verify edge case scenarios as far as inputs are concerned and challenging the fundamental boundaries of the code. For instance suppose we have the altimeter sending the data regarding its altitude in meters - if we exceed a certain alititude such that the quantity of digits being sent exceeds the limitations of our parser - it causes an error. 
 
 
 #### Soil Evaluation
 Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
 
-There were 2 key concepts to unlocking the power of the sensor itself - and that was the interrogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and command the sensor.
+There were 2 key concepts to unlocking the power of the sensor itself - and that was the interrogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and command the sensor. After a substantial amount of testing, we were able to successfully pull data from the sensor using a custom ModbusRTU implementation!
 
 
 
@@ -215,7 +217,21 @@ Failure analysis around our second full scale launch was extensive and began wit
   </div>                                   
 <p align="center"><em>Rocket Stability Loss</em></p>
 
-Across aerospace, an incredibly important concept to the development of a vehicle is static stability. 
+Across aerospace, an incredibly important concept to the development of a vehicle is static stability. This refers to the phenomenon that occurs when a vehicle is moving through fluid (such as air in this case) where the fluid applies force to the vehicle such that it is returned to its original orientation. We clearly lost this ability during this flight, leading to an extensive investigation into the why.
+
+Our first thought was around the launch angle of the vehicle - during the day of the launch the videos we had, showed the vehicle sitting at a pretty aggressive launch angle (around 6 degrees) - Since the vehicle had a pretty aggressive angle of attack we believed that its velocity off the rail perhaps was not sufficient to account for stability. However after running a couple of simulations - our rocket clearly should have been able to withstand even up to an 8 degree launch. So we kept looking.
+
+Then we started charting the velocity differences between our first launch and our second launch - and we discovered something interestng. 
+
+<div align="center">   
+    <img src="\FlightVelocityComparison.png" alt="Flight Velocity Comparison.">                                    
+  </div>                                   
+<p align="center"><em>Flight Velocity Comparision</em></p>
+
+The orange line is the failed launch and the blue is the successful flight - as can be clearly seen, the velocity off the rail for the failed flight was substantially lower then the first. 
+
+Now were getting somewhere - we have our first tangible touch of data indicating there was a substantial failure somewhere in our launch proceedings. 
 
 ### Conclusion
 
+Although we could not attend Huntsville, Alabama to launch our rocket - we still achieved every single goal we wanted to achieve with this team. We vertically integrated our entire tech stack, lowering costs and increasing capability for both our team and future teams coming out of OU. We achieved the insitutional changes we wanted for our team, through extensive work with current OU adminstration - and ultimately we learned the most from our failures. We learned that we needed to secure an incredibly robust supply chain to ensure we have the resources to rebuild if a catastrophic launch occurs again. 
