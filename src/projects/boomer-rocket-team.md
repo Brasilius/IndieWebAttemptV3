@@ -50,7 +50,7 @@ On the other end, there is the payload challenge - which seeks to challenge stud
 Teams were asked to design a payload which can be autonomously operated in order to collect a sample of soil and evaluate it for various properties such as:
 - Soil Conductivity (our chosen experiment)
 - Nitrate Nitrite Content
-- Ph
+- pH
 
 Results then had to be wirelessly transmitted back to a base station, with time stamps.
 
@@ -111,7 +111,7 @@ In creating our own auger, we were able to reach the tolerances and dimensions w
 ![SoilTest](/SoilTesting.jpg)
 <p align="center"><em>Soil Extraction Test</em></p>
 
-As a final note before we move into the software portion, it's crucial to mention how we progressed our science experiment for the payload challenge. As the software architect, during the process of testing our soil evaluation capabilities, I came to a crucial discovery - of the three experiments we were asked to perform (and choose from) - the only process which remained scientifically accurate without needing an onboard water sample (which could complicate the dynamics of the launch), was electrical conductvity. Electrical conductivity as an experiment requires the moisture in the sample itself to remain unaffected in order to ensure that the sample is accurate - and as such bringing water with us, compromises the experiment!
+As a final note before we move into the software portion, it's crucial to mention how we progressed our science experiment for the payload challenge. As the software architect, during the process of testing our soil evaluation capabilities, I came to a crucial discovery - of the three experiments we were asked to perform (and choose from) - the only process which remained scientifically accurate without needing an onboard water sample (which could complicate the dynamics of the launch), was electrical conductivity. Electrical conductivity as an experiment requires the moisture in the sample itself to remain unaffected in order to ensure that the sample is accurate - and as such bringing water with us, compromises the experiment!
 
 Again same as the original LV, we took the lessons we learned in designing and creating the payload and brought it forward to software evaluation.
 
@@ -143,7 +143,7 @@ With all that in mind, I think its appropriate to begin introducing the hardware
 
 The base station hardware wise, is the least complex system in the stack - composed of just an Esp32, a RYLR998 LoRa Transceiver and a USB-C cable to your laptop. 
 
-Similarly the software is also very simple by comparison. We can fundamentally divide the operation of the base station into 4 seperate states - and this defines the code structure by proxy.
+Similarly the software is also very simple by comparison. We can fundamentally divide the operation of the base station into 4 separate states - and this defines the code structure by proxy.
 
 - State 1: Listener (Link to Payload Separator)
 - State 2: Sender (Link to Payload Separator)
@@ -155,16 +155,16 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 
  During the timeline of development, we wanted to verify the capabilities of our hardware, and given the fact that were students - we chose the easiest way to do that. We had one team of people stay in the middle of a field (with a base station) and another group of people drive the other way in a car. 
 
- **here is where me being raised in a European family accidentally worked in our favor** - during the design and selection process - I misheard 2000 feet for 2000 meters, and designed the system to be able to communicate at those ranges. This of course, was *blatant* overkill for the project - but im not complaining about the results. 
+ **here is where me being raised in a European family accidentally worked in our favor** - during the design and selection process - I misheard 2000 feet for 2000 meters, and designed the system to be able to communicate at those ranges. This of course, was *blatant* overkill for the project - but I'm not complaining about the results. 
 
- We achieved a 100% recieve rate (no packets lost) while one reciever was in a moving car, with no line of sight - basically showing that we were in a faraday cage environment at over a kilometer away and still able to perform the needed duties of the project.
+ We achieved a 100% receive rate (no packets lost) while one receiver was in a moving car, with no line of sight - basically showing that we were in a faraday cage environment at over a kilometer away and still able to perform the needed duties of the project.
 
 
 ### Nose Cone Electronics Bay
 
-The nose cone brought a whole new host of issues into the mix. Fon one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relavtively simple however required alot of manual tinkering
+The nose cone brought a whole new host of issues into the mix. For one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relatively simple however required a lot of manual tinkering
 
-The purpose of the nose cone electronics were to be a manual seperator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter.
+The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter.
 
 ### Payload
 
@@ -183,7 +183,7 @@ There are currently 4 C++ helper programs that we run concurrent to the orchestr
 - modbus.cpp
 - motor.cpp
 
-Each of these dictate a seperate process that needs to be managed or called by the state machine. The standard run time for the project can be boiled down to the following:
+Each of these dictate a separate process that needs to be managed or called by the state machine. The standard run time for the project can be boiled down to the following:
 
 - Python orchestrator is started via ```uv run main.py```
 - ```main.py``` starts a ```thread``` for receiving data packets and listens constantly
@@ -202,13 +202,13 @@ Software testing in context to the payload refers to the ability to verify edge 
 #### Soil Evaluation
 Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
 
-There were 2 key concepts to unlocking the power of the sensor itself - and that was the interogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and commmand the sensor.
+There were 2 key concepts to unlocking the power of the sensor itself - and that was the interrogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and command the sensor.
 
 
 
 ### Failure Analysis
 
-Failure analysis around our second full scale launch was extensive and begain with a huge amount of retroactive video playback. To begin analyzing why the rocket crashed we had to understand the underlying physics that led to the crash to begin with.
+Failure analysis around our second full scale launch was extensive and began with a huge amount of retroactive video playback. To begin analyzing why the rocket crashed we had to understand the underlying physics that led to the crash to begin with.
 
 <div align="center">   
     <img src="\RocketStabilityLoss.png" alt="Rocket Stability Loss">                                    
