@@ -15,11 +15,10 @@
 </svelte:head>
 
 <div class="container">
-
 	<!-- Hero / h-card -->
 	<section class="hero h-card">
 		<div class="greeting">
-			<span class="hello">"Rocky and Grace Save Stars!"</span>
+			<span class="hello">"We choose to go to the Moon this decade!"</span>
 		</div>
 
 		<h1>
