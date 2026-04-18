@@ -119,7 +119,7 @@ Again same as the original LV, we took the lessons we learned in designing and c
 
 The software stack for this project is where the majority of my time and focus went for this team. As the only member with a solid understanding of DevOps practices and deeper experiences with Linux SBC's and Microcontrollers, I took the lead here.
 
-As a quick note - all source code can be viewed [here](https://github.com/Brasilius/PayloadRepo2026).
+As a quick note - all source code can be viewed [here](https://github.com/Brasilius/PayloadRepo2026). Im going to avoid massive code blocks here for readabilies sake, but I highly encourage taking a look at the source code!
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;">
   <img src="/logos/linux.svg" alt="Linux" style="height: 48px; width: auto;" />
@@ -150,6 +150,8 @@ Similarly the software is also very simple by comparison. We can fundamentally d
 - State 3: Sender (Link to Payload)
 - State 4: Listener (Link to Payload)
 
+Essentially, each state determines the mode of operation for base station - which in this case is the target of the command, and similarly how to receive the information from the partner computer board. Since each board has a different transmission and retrieval - the base station needs to modify its parser for the information such that the information coming is still understandable for any ground operator. 
+
 
 #### Testing
 
@@ -174,7 +176,7 @@ The payload is the most complex software system onboard the Launch Vehicle - and
 
 It functions through the benefits provided by using a Linux single board computer. We used a custom version of ```Raspbian``` OS. 
 
-Because this is a fully functional operating system, we are able to take advantage of multi-threading. 
+Because this is a fully functional operating system, we are able to take advantage of multi-threading on a *relatively* powerful arm cpu and 2 whole gigabytes of RAM. 
 
 Multi-threading in this context refers to the ability to run multiple programs concurrently - which as far as the Esp32 setups are concerned is not possible. We used the ```Threading``` and ```Subprocess``` modules on Python (via UV by astral) to create a Python orchestration layer that can call subserviant c++ helper functions. This means that we get the ease and simplicity of python for the logic that dictates the payload finite state machine, while retaining the speed and performance requirements derived from the hardware from c++.
 
@@ -192,6 +194,8 @@ Each of these dictate a separate process that needs to be managed or called by t
 - Upon receiving a signal, ```motor.cpp``` is called and begins extracting soil.
 - When soil and motor are situated inside the payload, ```modbus.cpp``` is called, and the soil data is loaded into the ```buffer``` of the python program.
 - Then the ```transmitter.cpp``` program is called and sends the data to the base station.
+- From there the base station configures a ```javascript``` dashboard native in the browser to show the information live to an operator!
+
 
 
 #### Testing
@@ -226,12 +230,19 @@ Then we started charting the velocity differences between our first launch and o
 <div align="center">   
     <img src="\FlightVelocityComparison.png" alt="Flight Velocity Comparison.">                                    
   </div>                                   
-<p align="center"><em>Flight Velocity Comparision</em></p>
+<p align="center"><em>Flight Velocity Comparison</em></p>
 
 The orange line is the failed launch and the blue is the successful flight - as can be clearly seen, the velocity off the rail for the failed flight was substantially lower then the first. 
 
-Now were getting somewhere - we have our first tangible touch of data indicating there was a substantial failure somewhere in our launch proceedings. 
+Now were getting somewhere - we have our first tangible touch of data indicating there was a substantial failure somewhere in our launch proceedings. But again - that alone should not have led to the complete loss of stability seen. Clearly we were still missing something else.
+
+Thats when it hit us... our payload has a crucial modification that may have led to the disaster as well. In prior test runs, the payload had a simulated mass which was fundamentally static - however for the run in question now we had used sand to artifically increase the weight of the payload since the goal of the run was to prove payload seperation. 
+
+Ultimately the conclusion that we had come too was that the failure was due to a combination of cascading failures, including but not limited too:
+- An aggressive launch angle
+- A slow burning L-Class motor
+- Center of gravity being modified due to payload weight distribution
 
 ### Conclusion
 
-Although we could not attend Huntsville, Alabama to launch our rocket - we still achieved every single goal we wanted to achieve with this team. We vertically integrated our entire tech stack, lowering costs and increasing capability for both our team and future teams coming out of OU. We achieved the insitutional changes we wanted for our team, through extensive work with current OU adminstration - and ultimately we learned the most from our failures. We learned that we needed to secure an incredibly robust supply chain to ensure we have the resources to rebuild if a catastrophic launch occurs again. 
+Although we could not attend Huntsville, Alabama to launch our rocket due to a combination of supply chain constraints and the timing of the rocket crash - we still achieved every single goal we wanted to achieve with this team. We vertically integrated our entire tech stack, lowering costs and increasing capability for both our team and future teams coming out of OU. We achieved the insitutional changes we wanted for our team, through extensive work with current OU adminstration - and ultimately we learned the most from our failures. We learned that we needed to secure an incredibly robust supply chain to ensure we have the resources to rebuild if a catastrophic launch occurs again. 
