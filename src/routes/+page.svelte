@@ -18,7 +18,7 @@
 	<!-- Hero / h-card -->
 	<section class="hero h-card">
 		<div class="greeting">
-			<span class="hello">"We choose to go to the Moon this decade!"</span>
+			<span class="hello">"Amaze,Amaze,Amaze!"</span>
 		</div>
 
 		<h1>
