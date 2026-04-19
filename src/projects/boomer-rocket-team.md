@@ -22,7 +22,8 @@ date: '2026-04-09'
 
 ## Overview
 
-[NASA USLI](https://www.nasa.gov/learning-resources/nasa-student-launch/) or otherwise known as the University Student Launch Challenge, is a rocketry competition in which multidisciplinary teams, design a high powered rocket to accomplish an objective. In context to this year's competition I had the privilege of acting as Captain and Chief Software Architect for the Boomer Rocket Team.
+
+[NASA USLI](https://www.nasa.gov/learning-resources/nasa-student-launch/) or otherwise known as the University Student Launch Challenge, is a rocketry competition in which multidisciplinary teams design a high powered rocket to accomplish an objective. In the context of this year's competition I had the privilege of acting as Captain and Chief Software Architect for the Boomer Rocket Team.
 
 ![Team Photo](/teamphoto.jpg)
 <p align="center"><em>Leadership Team Photo</em></p>
@@ -58,7 +59,9 @@ There were various technical requirements also involved with the process of desi
 
 ### Our approach
 
-Our teams approach to this challenge, was less designing a rocket and more designing a foundation. We wanted to fundamentally control every aspect of our design, and lower dependence on outside suppliers (in other words [vertically integrate](https://www.investopedia.com/terms/v/verticalintegration.asp)) our projects wherever possible. **This led to stellar results across our stack.** By fundamentally taking control of the production and design of our stack and lowering dependence on commercial suppliers, the level of control, granularity and reproducibility of our results skyrocketed. We also saw incredible financial benefits from vertically integrating - lowering the cost of several subsystems by upwards of *3x*...
+<p align="center"><em>"TL;DR:" Instead of buying all our parts, we vertically integrated.</em></p>
+
+Our team's approach to this challenge, was less designing a rocket and more designing a foundation. We wanted to fundamentally control every aspect of our design, and lower dependence on outside suppliers (in other words [vertically integrate](https://www.investopedia.com/terms/v/verticalintegration.asp)) our projects wherever possible. **This led to stellar results across our stack.** By fundamentally taking control of the production and design of our stack and lowering dependence on commercial suppliers, the level of control, granularity and reproducibility of our results skyrocketed. We also saw incredible financial benefits from vertically integrating - lowering the cost of several subsystems by upwards of *3x*...
 
 ### Launch Vehicle
 Our approach to this challenge was an [L-1390](https://www.thrustcurve.org/motors/AeroTech/L1390G/) powered custom launch vehicle. To begin this portion, we had several design goals with the LV this year, involving the vertical integration mentioned prior. Some of those are listed below:
@@ -67,7 +70,7 @@ Our approach to this challenge was an [L-1390](https://www.thrustcurve.org/motor
 - Increased Reliance on 3D Printing for Components
 - Higher emphasis on "Smart Rocket" features
 
-As can be clearly seen, these are some fairly ambitious goals, which is why I'm proud to say that we smashed through every single one of them!
+These are some ambitious goals and I'm excited to talk about how we approached them!
 
 For instance with regards to the carbon fiber tubes, we constructed an open source winding machine, using 3D printed parts and a mandrel we found lying inside the engineering bay to fully construct our tubes. 
 
@@ -93,7 +96,7 @@ In functional terms, that means that we:
 - Validated and tested the design
 - Extensively built hardware where possible
 <div align="center">   
-    <img src="\FinalPayloadDrawing.png" alt="Final Payload Model">                                    
+    <img src="/FinalPayloadDrawing.png" alt="Final Payload Model">                                    
   </div>                                   
 <p align="center"><em>Final Payload Model</em></p>
 
@@ -119,7 +122,7 @@ Again same as the original LV, we took the lessons we learned in designing and c
 
 The software stack for this project is where the majority of my time and focus went for this team. As the only member with a solid understanding of DevOps practices and deeper experiences with Linux SBC's and Microcontrollers, I took the lead here.
 
-As a quick note - all source code can be viewed [here](https://github.com/Brasilius/PayloadRepo2026). Im going to avoid massive code blocks here for readabilies sake, but I highly encourage taking a look at the source code!
+As a quick note - all source code can be viewed [here](https://github.com/Brasilius/PayloadRepo2026). I'm going to avoid massive code blocks here for readability's sake, but I highly encourage taking a look at the source code!
 
 <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; margin: 2rem 0; flex-wrap: wrap;">
   <img src="/logos/linux.svg" alt="Linux" style="height: 48px; width: auto;" />
@@ -132,12 +135,12 @@ As a quick note - all source code can be viewed [here](https://github.com/Brasil
 
 To begin software, I think it makes sense to explain the underlying concept that drove the development of the software to where it is now. 
 
-[Finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine) (or FSMs as we're going to refer to them from now on) are a mathematical model of computation in which a machine can exist in exactly one state of many states. States in this context refer to things like "low power mode" on your phone - basically its just ensuring that your hardware is solely focused on accomplishing one task at a time where possible.
+[Finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine) (or FSMs as we're going to refer to them from now on) are a mathematical model of computation in which a machine can exist in exactly one state of many states. States in this context refer to things like "low power mode" on your phone - basically it's just ensuring that your hardware is solely focused on accomplishing one task at a time where possible.
 
 For our project, we identified that several subsystems onboard the rocket had to use state machines for a variety of crucial reasons - but most critical among them was NASA's accountability requirement. NASA prohibits automatic state transitions, as to ensure that teams have as much control as physically possible on LV operations - especially when it comes to releasing a separated payload. The ability to abort a separation is just as important as the ability to separate.
 
 
-With all that in mind, I think its appropriate to begin introducing the hardware based on subsystem.
+With all that in mind, I think it's appropriate to begin introducing the hardware based on subsystem.
 
 ### Base Station
 
@@ -155,7 +158,7 @@ Essentially, each state determines the mode of operation for base station - whic
 
 #### Testing
 
- During the timeline of development, we wanted to verify the capabilities of our hardware, and given the fact that were students - we chose the easiest way to do that. We had one team of people stay in the middle of a field (with a base station) and another group of people drive the other way in a car. 
+ During the timeline of development, we wanted to verify the capabilities of our hardware, and given the fact that we're students - we chose the easiest way to do that. We had one team of people stay in the middle of a field (with a base station) and another group of people drive the other way in a car. 
 
  **here is where me being raised in a European family accidentally worked in our favor** - during the design and selection process - I misheard 2000 feet for 2000 meters, and designed the system to be able to communicate at those ranges. This of course, was *blatant* overkill for the project - but I'm not complaining about the results. 
 
@@ -166,10 +169,18 @@ Essentially, each state determines the mode of operation for base station - whic
 
 The nose cone brought a whole new host of issues into the mix. For one - on top of having to worry about how to implement a wireless protocol, and vertically integrating an altimeter tech stack to reduce costs - we also had to ensure that it was capable of withstanding 9 G's of acceleration. The build was relatively simple however required a lot of manual tinkering. 
 
+<div align="center">   
+    <img src="/NoseConeCircuits.jpg" alt="Nose Cone Circuits.">                                    
+  </div>                                   
+<p align="center"><em>A LOT of Tinkering</em></p>
 
-The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter. 
 
-We designed this system with an I2C Altimeter and a standard UART LoRa Transceiver, all wired in tandem to an ESP32. We also connected via a logic level mostfett, an E-Match powered wire cutter. Essentially following the concept of operations, once a ground operator recieved a read out indicating that a certain altitude had been reached, they could fire the e-match and seperate the payload for a full deployment. 
+
+The purpose of the nose cone electronics were to be a manual separator of the payload module and the launch vehicle, while also running dual purpose as a live telemetry altimeter.
+
+We designed this system with an I2C Altimeter and a standard UART LoRa Transceiver, all wired in tandem to an ESP32. We also connected via a logic level MOSFET, an E-Match powered wire cutter. Essentially following the concept of operations, once a ground operator received a read out indicating that a certain altitude had been reached, they could fire the e-match and separate the payload for a full deployment. 
+
+Some of the more technical aspect of this system were things involved with asynchronous computing and frequency - as noted prior NASA has a strict set of requirements involved with ensuring that all systems onboard are designed with intention and purpose. To this end - NASA asked us specifically to tune our transmissions to the frequency of ```914.5``` MHz in order to ensure that wireless bands on launch day were not interrupted. Furthermore we spent a great amount of effort ensuring that all hardware that was connected was functional over a ```115200``` baud rate.
 
 ### Payload
 
@@ -179,7 +190,7 @@ It functions through the benefits provided by using a Linux single board compute
 
 Because this is a fully functional operating system, we are able to take advantage of multi-threading on a *relatively* powerful arm cpu and 2 whole gigabytes of RAM. 
 
-Multi-threading in this context refers to the ability to run multiple programs concurrently - which as far as the Esp32 setups are concerned is not possible. We used the ```Threading``` and ```Subprocess``` modules on Python (via UV by astral) to create a Python orchestration layer that can call subserviant c++ helper functions. This means that we get the ease and simplicity of python for the logic that dictates the payload finite state machine, while retaining the speed and performance requirements derived from the hardware from c++.
+Multi-threading in this context refers to the ability to run multiple programs concurrently - which as far as the Esp32 setups are concerned is not possible. We used the ```Threading``` and ```Subprocess``` modules on Python (via UV by astral) to create a Python orchestration layer that can call subservient C++ helper functions. This means that we get the ease and simplicity of python for the logic that dictates the payload finite state machine, while retaining the speed and performance requirements derived from the hardware from C++. This is needed because in several contexts, Python's non-deterministic execution could present an obstacle in time critical tasks like wireless communication, potentially missing packets and data!
 
 There are currently 4 C++ helper programs that we run concurrent to the orchestrator:
 
@@ -199,17 +210,23 @@ Each of these dictate a separate process that needs to be managed or called by t
 
 Fundamentally what I wanted to achieve with a python orchestration layer was fairly simple - operational simplicity without incurring the technical debt from trying to make python something it just isn't. By using C++ helper functions we get to maintain operational simplicity without sacrificing the runtime speed of a pre-compiled language like C++.
 
+
+<div align="center">   
+    <img src="/PayloadCollectionandTestChamber.png" alt="Payload Test and Collection Bay.">                                    
+  </div>                                   
+<p align="center"><em>Payload Test and Collection Bay</em></p>
+
 #### Testing
 
 Testing the payload involved 2 distinct branches across hardware and software testing.
 
-Software testing in context to the payload refers to the ability to verify edge case scenarios as far as inputs are concerned and challenging the fundamental boundaries of the code. For instance suppose we have the altimeter sending the data regarding its altitude in meters - if we exceed a certain alititude such that the quantity of digits being sent exceeds the limitations of our parser - it causes an error. 
+Software testing in context to the payload refers to the ability to verify edge case scenarios as far as inputs are concerned and challenging the fundamental boundaries of the code. For instance suppose we have the altimeter sending the data regarding its altitude in meters - if we exceed a certain altitude such that the quantity of digits being sent exceeds the limitations of our parser - it causes an error.
 
 
 #### Soil Evaluation
 Soil evaluation for the payload came in the form of a 7-1 Cheap Soil Sensor we found on AliBaba sourced from China. When the sensor arrived it was paired with a small instruction manual with minimal instructions on how to use it - and even worse - implying that the hardware only worked with Windows. Windows in an embedded context is an absolute no-go and dealbreaker - but thankfully the developers of the soil sensor did leave behind some crucial clues. They revealed that the hardware was powered by ModbusRTU and we could access the information on board via registers on-board the sensor itself. 
 
-There were 2 key concepts to unlocking the power of the sensor itself - and that was the interrogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and command the sensor. After a substantial amount of testing, we were able to successfully pull data from the sensor using a custom ModbusRTU implementation!
+There were 2 key concepts to unlocking the power of the sensor itself - and that was the interrogation frame and the retrieval frame - which provided the framework by which we could send bytes to both receive and command the sensor. After a substantial amount of testing, we were able to successfully pull data from the sensor using a custom ModbusRTU implementation! Calling the register  ```0x0015``` over the default baud rate ```9600``` allowed us to pull the soil conductivity reliably!
 
 
 
@@ -218,32 +235,46 @@ There were 2 key concepts to unlocking the power of the sensor itself - and that
 Failure analysis around our second full scale launch was extensive and began with a huge amount of retroactive video playback. To begin analyzing why the rocket crashed we had to understand the underlying physics that led to the crash to begin with.
 
 <div align="center">   
-    <img src="\RocketStabilityLoss.png" alt="Rocket Stability Loss">                                    
+    <img src="/RocketStabilityLoss.png" alt="Rocket Stability Loss">                                    
   </div>                                   
 <p align="center"><em>Rocket Stability Loss</em></p>
 
 Across aerospace, an incredibly important concept to the development of a vehicle is static stability. This refers to the phenomenon that occurs when a vehicle is moving through fluid (such as air in this case) where the fluid applies force to the vehicle such that it is returned to its original orientation. We clearly lost this ability during this flight, leading to an extensive investigation into the why.
 
-Our first thought was around the launch angle of the vehicle - during the day of the launch the videos we had, showed the vehicle sitting at a pretty aggressive launch angle (around 6 degrees) - Since the vehicle had a pretty aggressive angle of attack we believed that its velocity off the rail perhaps was not sufficient to account for stability. However after running a couple of simulations - our rocket clearly should have been able to withstand even up to an 8 degree launch. So we kept looking.
-
-Then we started charting the velocity differences between our first launch and our second launch - and we discovered something interestng. 
 
 <div align="center">   
-    <img src="\FlightVelocityComparison.png" alt="Flight Velocity Comparison.">                                    
+    <img src="/ANSYSBoundaryLayer.png" alt="Boundary Layer.">                                    
+  </div>                                   
+<p align="center"><em>Boundary Layer Analysis</em></p>
+
+Our first thought was around the launch angle of the vehicle - during the day of the launch the videos we had, showed the vehicle sitting at a pretty aggressive launch angle (around 6 degrees) - Since the vehicle had a pretty aggressive angle of attack we believed that its velocity off the rail perhaps was not sufficient to account for stability. However after running a couple of simulations - our rocket clearly should have been able to withstand even up to an 8 degree launch. So we kept looking.
+
+<div align="center">   
+    <img src="/AnsysFinFluidFlow.png" alt="Flow Analysis.">                                    
+  </div>                                   
+<p align="center"><em>Flow Analysis</em></p>
+
+
+Then we started charting the velocity differences between our first launch and our second launch - and we discovered something interesting. 
+
+<div align="center">   
+    <img src="/FlightVelocityComparison.png" alt="Flight Velocity Comparison.">                                    
   </div>                                   
 <p align="center"><em>Flight Velocity Comparison</em></p>
 
-The orange line is the failed launch and the blue is the successful flight - as can be clearly seen, the velocity off the rail for the failed flight was substantially lower then the first. 
+The orange line is the failed launch and the blue is the successful flight - as can be clearly seen, the velocity off the rail for the failed flight was substantially lower than the first. 
 
-Now were getting somewhere - we have our first tangible touch of data indicating there was a substantial failure somewhere in our launch proceedings. But again - that alone should not have led to the complete loss of stability seen. Clearly we were still missing something else.
+Now we're getting somewhere - we have our first tangible touch of data indicating there was a substantial failure somewhere in our launch proceedings. But again - that alone should not have led to the complete loss of stability seen. Clearly we were still missing something else.
 
-Thats when it hit us... our payload has a crucial modification that may have led to the disaster as well. In prior test runs, the payload had a simulated mass which was fundamentally static - however for the run in question now we had used sand to artifically increase the weight of the payload since the goal of the run was to prove payload seperation. 
+That's when it hit us... our payload has a crucial modification that may have led to the disaster as well. In prior test runs, the payload had a simulated mass which was fundamentally static - however for the run in question now we had used sand to artificially increase the weight of the payload since the goal of the run was to prove payload separation. 
 
-Ultimately the conclusion that we had come too was that the failure was due to a combination of cascading failures, including but not limited too:
+Ultimately the conclusion that we had come to was that the failure was due to a combination of cascading failures, including but not limited to:
 - An aggressive launch angle
 - A slow burning L-Class motor
 - Center of gravity being modified due to payload weight distribution
 
 ### Conclusion
 
-Although we could not attend Huntsville, Alabama to launch our rocket due to a combination of supply chain constraints and the timing of the rocket crash - we still achieved every single goal we wanted to achieve with this team. The team built tooling that will last generations of students, permanently lowering the cost of carbon fiber manufacturing by a massive margin. We designed embedded systems that far outperformed commercial counterparts, with safety built in as the priority, not secondary. 
+Although we could not attend Huntsville, Alabama to launch our rocket due to a combination of supply chain constraints and the timing of the rocket crash - we still achieved every single goal we wanted to achieve with this team. The team built tooling that will last generations of students, permanently lowering the cost of carbon fiber manufacturing by a massive margin. We designed embedded systems that far outperformed commercial counterparts, with safety built in as the priority, not secondary - and made sure it's open source so that everyone can benefit from the work we did - not just us. We challenged the status quo of our University, and created the foundation for a team that is not just aerospace engineers but represents all disciplines from fine arts to computer science and aerospace engineering. 
+
+![Nasa Logo](/NASA-LOGO.png)
