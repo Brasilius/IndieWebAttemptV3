@@ -49,7 +49,7 @@
 		<section>
 			<h2>Thinking about</h2>
 			<p>
-			Balancing having a cool looking linux distro, with being genuinely productive. I want to use hyprland but there is genuinely no way its more efficent then GNOME.
+			FINDING A JOB PLEAAAAAAAAAAAAAASE.
 			</p>
 		</section>
 
