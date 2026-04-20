@@ -1,6 +1,6 @@
 ---
 title: IndieWeb Personal Site
-description: A personal website built with SvelteKit and mdsvex, styled with a custom earthy matcha palette. Features a blog, projects page, and IndieWeb microformats.
+description: A test entry detailing how this website was built.
 tags: [sveltekit, typescript, indieweb, css]
 image: 1920px-Svelte_Logo.svg.png
 imageAlt: Svelte Logo
@@ -21,7 +21,7 @@ A personal portfolio website designed to host a record of both professional achi
 ## Features
 
 - File-based routing with TypeScript
-- Markdown blog posts with frontmatter metadata
-- Responsive design
+- Markdown blog posts for easy updates
+- Responsive design (thanks to svelte compilation)
 - Light Mode + Dark Mode (tasteful color choices)
 
