@@ -2,7 +2,7 @@ import { getPosts } from '$lib/posts.js';
 import { getProjects } from '$lib/projects.js';
 import type { RequestHandler } from './$types';
 
-const SITE = 'https://nielsleonardolarsen.com';
+const SITE = 'https://nielslarsen.dev';
 
 const staticRoutes = ['', '/about', '/blog', '/projects', '/resume', '/now', '/search'];
 
