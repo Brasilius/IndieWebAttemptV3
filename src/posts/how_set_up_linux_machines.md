@@ -24,16 +24,32 @@ Linux for many years - due to the technical nature of the people who develop it,
 ### My personal set up structure
 
 #### Distro of choice
-
+- fedora linux
+- Gnome Tweaks
 #### Software
-
+- Zen Browser
+- NCSpot
+- Obsidian
+- VSCode
+- WinBoat
+- OnlyOffice
+- Sticky Notes
+- Btop
 #### Windows apps
+- Solidworks
+- Microsoft Office Suite
 
 #### Hardware considerations
-
+- AMD CPU
+- AMD GPU
+- 32+ GB of RAM
 #### Ensuring your system is healthy
-
+- Checking average wattage
+- etc.
 #### And thats it!
 
 #### Laptop list
 
+- Framework 12
+- Framework 13
+- Framework 13 Pro
