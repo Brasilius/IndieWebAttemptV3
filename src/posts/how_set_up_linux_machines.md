@@ -21,3 +21,19 @@ Linux for many years - due to the technical nature of the people who develop it,
 
 **thankfully** in the year 2026 - the vast majority of these issues have become much easier to approach. The installers for linux are alot more approachable and user friendly, and beyond that - developers have come a massive way from the original premise of developing on linux through the terminal and the vast majority of projects are now easily configured through user friendly UI's.
 
+### My personal set up structure
+
+#### Distro of choice
+
+#### Software
+
+#### Windows apps
+
+#### Hardware considerations
+
+#### Ensuring your system is healthy
+
+#### And thats it!
+
+#### Laptop list
+
