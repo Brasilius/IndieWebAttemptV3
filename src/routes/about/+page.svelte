@@ -42,7 +42,7 @@
 
 			<div class="prose">
 				<p>
-					Hi - I'm Leo. I'm a Swedish Brazilian aerospace engineer working out of Dallas, Texas. 
+					Hi - I'm Leo. I'm an aerospace engineer working out of Dallas, Texas. 
 					I have a passion for building systems that work together!
 				</p>
 
