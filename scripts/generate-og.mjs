@@ -70,7 +70,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
   <text x="80" y="572"
     font-family="Noto Sans Mono, Liberation Mono, monospace"
     font-size="20"
-    fill="#413D35">nielsleo.com</text>
+    fill="#413D35">www.nielslarsen.dev</text>
 
   <!-- Favicon echo (small circle with accent) -->
   <circle cx="1100" cy="555" r="22" fill="#9DC87A" opacity="0.12"/>
