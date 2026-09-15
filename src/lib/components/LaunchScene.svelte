@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import PixelLogo from './PixelLogo.svelte';
 
 	let journey: HTMLElement;
 	let progress = $state(0);
@@ -14,11 +15,7 @@
 	let stage = $derived(progress < 0.08 ? 0 : progress < 0.35 ? 1 : progress < 0.72 ? 2 : 3);
 	const stages = ['On the launchpad', 'A little less Earth.', 'A little more possibility.', 'Keep looking up.'];
 	const notes = ['Every good flight starts with a little curiosity.', 'From an idea on paper to something in the sky.', 'Hardware, software, and everything in between.', 'There’s always something else to figure out.'];
-	const letters = [
-		['11000', '11000', '11000', '11000', '11000', '11111', '11111'],
-		['11111', '11111', '11000', '11110', '11000', '11111', '11111'],
-		['01110', '11011', '11011', '11011', '11011', '11011', '01110']
-	];
+
 	const stars = Array.from({ length: 68 }, (_, i) => ({
 		x: (i * 137 + 31) % 1000, y: (i * 73 + 17) % 570,
 		size: i % 7 === 0 ? 3 : 2, delay: -(i % 9)
@@ -100,7 +97,7 @@
 				<g style={`transform: translateY(${Math.round(flight * 630)}px)`}>
 					<!-- Open steel launch gantry. -->
 					<path d="M599 564V363h5v201M637 564V363h5v201M599 363h43v5h-43M599 400h43M599 440h43M599 480h43M599 520h43M604 368l33 32-33 40 33 40-33 40 33 39" fill="none" stroke="var(--gantry)" stroke-width="4" />
-					<path d="M639 410h38v5h-38zM639 482h38v5h-38z" fill="var(--gantry)" />
+					<path d="M639 410h47v5h-47zM639 482h47v5h-47z" fill="var(--gantry)" />
 					<rect class="beacon" x="616" y="354" width="8" height="6" fill="var(--sand)" />
 					<path d="M580 564h172v10H580zM592 574h148v8H592z" fill="var(--sand)" />
 					{#each Array.from({ length: 12 }) as _, i}<rect x={592 + i * 12} y="574" width="6" height="8" fill="var(--ground)" />{/each}
@@ -143,16 +140,7 @@
 			<div class="intro h-card">
 				<p class="greeting">“Amaze, amaze, amaze!”</p>
 				<a href="/about" class="pixel-logo" aria-label="Leo — more about me">
-					<svg viewBox="0 0 190 74" shape-rendering="crispEdges" aria-hidden="true">
-						{#each letters as letter, l}
-							{#each letter as row, y}
-								{#each [...row] as cell, x}
-									{#if cell === '1'}<rect class="logo-pixel" x={l * 60 + x * 10} y={y * 10} width="10" height="10" style={`--delay: ${-(x + y + l) * 0.19}s`} />{/if}
-								{/each}
-							{/each}
-						{/each}
-						<rect x="180" y="60" width="10" height="10" fill="var(--warm)" />
-					</svg>
+					<PixelLogo animated />
 				</a>
 				<h1>Making things fly<span>.</span></h1>
 				<p class="bio p-note">I’m <a href="/about" class="p-name u-url">Niels Leo Larsen</a>.<br />Aerospace engineer by trade.<br />Computer enthusiast by passion.</p>
@@ -188,8 +176,6 @@
 	.intro { position: absolute; top: 12%; left: var(--inset); width: min(48%, 650px); padding: clamp(1rem, 2vw, 2rem); background: var(--panel); border-left: 2px solid var(--leaf); }
 	.greeting { color: var(--sand); font: 0.85rem/1.5 var(--font-mono); margin-bottom: 1rem; }
 	.pixel-logo { display: block; width: clamp(210px, 26vw, 350px); max-width: 100%; margin-bottom: 1.25rem; }
-	.pixel-logo svg { width: 100%; display: block; overflow: visible; }
-	.logo-pixel { fill: var(--leaf); animation: phosphor 6s steps(1) infinite; animation-delay: var(--delay); }
 	h1 { font-size: clamp(1.5rem, 2.7vw, 2.6rem); letter-spacing: -0.05em; color: var(--cream); margin-bottom: 1rem; }
 	h1 span { color: var(--leaf); }
 	.bio { color: var(--copy); font-size: clamp(0.875rem, 1.15vw, 1.05rem); line-height: 1.8; }
@@ -212,8 +198,8 @@
 	.beacon { animation: twinkle 2s steps(1) infinite; }
 	.exhaust { transform-box: fill-box; transform-origin: top center; animation: burn 0.3s steps(2, end) infinite; }
 	.smoke { animation: vent 2s steps(6) infinite; animation-delay: var(--delay); }
+	.journey:not(.ready), .still, .asleep { --logo-play-state: paused; }
 	.journey:not(.ready) *, .still *, .asleep * { animation-play-state: paused !important; }
-	@keyframes phosphor { 0%, 88%, 100% { fill: var(--leaf); } 90%, 94% { fill: var(--sand); } 96% { fill: var(--cream); } }
 	@keyframes twinkle { 0%, 75%, 100% { opacity: 0.8; } 40% { opacity: 0.3; } }
 	@keyframes burn { from { transform: scaleY(0.78); } to { transform: scaleY(1.15); } }
 	@keyframes vent { from { transform: translate(0, 0); opacity: 0.8; } to { transform: translate(var(--drift), -12px); opacity: 0.2; } }

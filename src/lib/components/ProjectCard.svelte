@@ -1,39 +1,30 @@
 <script lang="ts">
 	import type { Project } from '$lib/projects.js';
 
-	let { project }: { project: Project } = $props();
+	let { project, detailed = false }: { project: Project; detailed?: boolean } = $props();
 </script>
 
-<article>
+<article class="pixel-card">
 	<a href="/projects/{project.slug}" class="card">
+		<div class="card-label"><span class="pixel-mark" aria-hidden="true"></span> PROJECT <span aria-hidden="true">↗</span></div>
 		{#if project.image}
 			<div class="card-image">
 				<img src={project.image} alt={project.imageAlt ?? project.title} />
 			</div>
 		{/if}
 
-		<div class="card-body">
+		<div class="card-body" class:detailed>
 			<h2>{project.title}</h2>
-			<span class="cta" aria-hidden="true">view →</span>
+			{#if detailed}
+				<p class="desc">{project.description}</p>
+				{#if project.tags?.length}<div class="tags">{#each project.tags as tag}<span class="tag">{tag}</span>{/each}</div>{/if}
+			{/if}
+			<span class="cta" aria-hidden="true">view project →</span>
 		</div>
 	</a>
 </article>
 
 <style>
-	article {
-		border: 1px solid var(--border);
-		border-radius: var(--radius-lg);
-		background: var(--surface);
-		overflow: hidden;
-		transition: border-color var(--t) var(--ease), transform 200ms var(--ease), box-shadow 200ms var(--ease);
-	}
-
-	article:hover {
-		border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
-		transform: translateY(-3px);
-		box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), 0 0 0 1px var(--accent-ring);
-	}
-
 	.card {
 		display: flex;
 		flex-direction: column;
@@ -54,17 +45,14 @@
 		height: 100%;
 		object-fit: cover;
 		display: block;
-		transition: transform 0.4s var(--ease);
-	}
 
-	article:hover .card-image img {
-		transform: scale(1.03);
 	}
 
 	.card-body {
 		padding: 1.25rem 1.5rem;
 		display: flex;
-		align-items: center;
+		align-items: start;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		gap: 1rem;
 	}
@@ -78,19 +66,23 @@
 		margin: 0;
 	}
 
-	article:hover h2 { color: var(--accent); }
+	article:is(:hover, :focus-within) h2 { color: var(--accent); }
 
 	.cta {
 		font-family: var(--font-mono);
 		font-size: 0.78rem;
-		color: var(--accent-dim);
+		color: var(--accent);
 		white-space: nowrap;
 		flex-shrink: 0;
 		transition: color var(--t), letter-spacing var(--t);
 	}
 
-	article:hover .cta {
+	article:is(:hover, :focus-within) .cta {
 		color: var(--accent);
 		letter-spacing: 0.03em;
 	}
+	.card-body.detailed { flex-direction: column; flex: 1; }
+	.desc { color: var(--text-muted); font-size: 0.875rem; line-height: 1.7; }
+	.tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+	.detailed .cta { margin-top: auto; padding-top: 0.5rem; }
 </style>

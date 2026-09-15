@@ -1,13 +1,8 @@
 <script lang="ts">
+	import PostCard from '$lib/components/PostCard.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
-
-	function formatDate(d: string) {
-		return new Date(d).toLocaleDateString('en-US', {
-			year: 'numeric', month: 'short', day: 'numeric'
-		});
-	}
 
 	// Group posts by year
 	const postsByYear = $derived(
@@ -42,20 +37,7 @@
 				<h2 class="year-label">{year}</h2>
 				<ul role="list" class="post-list">
 					{#each postsByYear[year] as post}
-						<li>
-							<a href="/blog/{post.slug}" class="post-row">
-								<span class="title">{post.title}</span>
-								<span class="spacer" aria-hidden="true"></span>
-								<time datetime={post.date}>{formatDate(post.date)}</time>
-							</a>
-							{#if post.tags?.length}
-								<div class="tags">
-									{#each post.tags as tag}
-										<span class="tag">{tag}</span>
-									{/each}
-								</div>
-							{/if}
-						</li>
+						<li><PostCard {post} /></li>
 					{/each}
 				</ul>
 			</section>
@@ -89,7 +71,7 @@
 		font-family: var(--font-mono);
 		font-size: 0.78rem;
 		font-weight: 500;
-		color: var(--text-faint);
+		color: var(--warm);
 		letter-spacing: 0.08em;
 		margin-bottom: 0.75rem;
 		text-transform: uppercase;
@@ -99,58 +81,7 @@
 		list-style: none;
 		display: flex;
 		flex-direction: column;
-		gap: 0.15rem;
-	}
-
-	.post-row {
-		display: flex;
-		align-items: baseline;
-		gap: 1rem;
-		padding: 0.65rem 0.85rem;
-		border-radius: var(--radius);
-		color: inherit;
-		text-decoration: none;
-		transition: background var(--t);
-		margin-inline: -0.85rem;
-	}
-
-	.post-row:hover {
-		background: var(--surface-2);
-	}
-
-	.post-row:hover .title {
-		color: var(--accent);
-	}
-
-	.title {
-		font-size: 0.975rem;
-		font-weight: 500;
-		color: var(--text);
-		transition: color var(--t);
-		flex-shrink: 0;
-	}
-
-	.spacer {
-		flex: 1;
-		height: 1px;
-		border-bottom: 1px dashed var(--border);
-		margin-bottom: 3px;
-		min-width: 1rem;
-	}
-
-	time {
-		font-family: var(--font-mono);
-		font-size: 0.78rem;
-		color: var(--text-muted);
-		white-space: nowrap;
-		flex-shrink: 0;
-	}
-
-	.tags {
-		display: flex;
-		gap: 0.3rem;
-		padding: 0.25rem 0.85rem 0.5rem;
-		flex-wrap: wrap;
+		gap: 1.25rem;
 	}
 
 	.empty {

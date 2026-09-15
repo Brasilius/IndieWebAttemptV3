@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import PixelLogo from './PixelLogo.svelte';
 
 	const links = [
 		{ href: '/about',    label: 'about'    },
@@ -39,16 +40,15 @@
 </script>
 
 <header>
-	<nav class="container">
+	<nav class="container" aria-label="Primary navigation">
 		<a href="/" class="logo" aria-label="Home">
-			<span class="dot" aria-hidden="true"></span>
-			<span class="wordmark">leo<span class="accent">.</span></span>
+			<PixelLogo />
 		</a>
 
 		<ul role="list" bind:this={navList}>
 			{#each links as link}
 				<li>
-					<a href={link.href} class:active={isActive(link.href)}>
+					<a href={link.href} class:active={isActive(link.href)} aria-current={isActive(link.href) ? "page" : undefined}>
 						{link.label}
 					</a>
 				</li>
@@ -125,28 +125,15 @@
 	.logo {
 		display: flex;
 		align-items: center;
-		gap: 0.6rem;
+		width: 64px;
+		min-height: 44px;
+		flex-shrink: 0;
+		margin-right: 0.5rem;
 		text-decoration: none;
 		color: var(--text);
 		transition: opacity var(--t);
 	}
 	.logo:hover { opacity: 0.8; color: var(--text); }
-
-	.dot {
-		width: 9px;
-		height: 9px;
-		border-radius: 50%;
-		background: var(--accent);
-		box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent-glow);
-		flex-shrink: 0;
-	}
-
-	.wordmark {
-		font-weight: 600;
-		font-size: 1.05rem;
-		letter-spacing: -0.03em;
-	}
-	.accent { color: var(--accent); }
 
 	/* Nav links */
 	ul {
@@ -219,7 +206,7 @@
 		align-items: center;
 		width: 40px;
 		height: 22px;
-		border-radius: 99px;
+		border-radius: 0;
 		background: var(--surface-2);
 		border: 1px solid var(--border);
 		padding: 2px;
@@ -230,7 +217,7 @@
 	.thumb {
 		width: 16px;
 		height: 16px;
-		border-radius: 50%;
+		border-radius: 0;
 		background: var(--accent);
 		display: flex;
 		align-items: center;
@@ -251,9 +238,7 @@
 			gap: 0;
 		}
 
-		.wordmark {
-			font-size: 0.95rem;
-		}
+		.logo { width: 52px; }
 
 		/* Scrollable link strip */
 		ul {
@@ -302,8 +287,6 @@
 			padding: 0.3rem 0.5rem;
 		}
 
-		.wordmark {
-			font-size: 0.88rem;
-		}
+		.logo { width: 46px; }
 	}
 </style>
