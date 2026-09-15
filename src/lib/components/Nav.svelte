@@ -116,7 +116,10 @@
 	}
 
 	nav {
-		display: flex;
+		max-width: none;
+		padding-inline: clamp(1rem, 2vw, 3rem);
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
 		align-items: center;
 		justify-content: space-between;
 	}
@@ -163,6 +166,7 @@
 
 	/* Controls group (search + theme toggle) */
 	.controls {
+		justify-self: end;
 		display: flex;
 		align-items: center;
 		gap: 0.25rem;
@@ -234,6 +238,7 @@
 	/* --- Mobile nav: single-row with horizontally scrollable links --- */
 	@media (max-width: 600px) {
 		nav {
+			display: flex;
 			flex-wrap: nowrap;
 			gap: 0;
 		}

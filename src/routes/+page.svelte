@@ -24,7 +24,6 @@
 		<p>I work across the stack, from embedded systems to finite element analysis, computational fluid dynamics, and astrodynamics. This is where I keep what I’m building, learning, and figuring out along the way.</p>
 		<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">Field notes on Instagram ↗</a>
 	</div>
-	<hr />
 
 	<!-- Currently section -->
 	<section class="currently">
@@ -55,7 +54,7 @@
 		{#if data.projects.length}
 			<div class="post-grid">
 				{#each data.projects as project}
-					<ProjectCard {project} />
+					<ProjectCard {project} detailed />
 				{/each}
 			</div>
 		{:else}
@@ -63,7 +62,7 @@
 		{/if}
 	</section>
 
-	<hr />
+	<hr class="archive-divider" />
 
 	<!-- Recent posts -->
 	<section class="recent-posts">
@@ -90,10 +89,27 @@
 
 <style>
 	hr {
-		margin-block: 3rem;
+		margin-block: clamp(2rem, 4vw, 4rem);
+		grid-column: 1 / -1;
 	}
 
-	.ground-content { padding-top: 4rem; scroll-margin-top: calc(var(--nav-height) + 1.5rem); }
+	.ground-content {
+		max-width: none;
+		padding-inline: clamp(1rem, 5vw, 7rem);
+		padding-top: clamp(2.5rem, 5vw, 5rem);
+		scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+	}
+	.ground-content > * { min-width: 0; }
+	.ground-intro { max-width: 68ch; }
+	.currently {
+		margin-top: 2rem;
+		padding: clamp(1.25rem, 2.5vw, 2.5rem);
+		border: 1px solid var(--border);
+		background: var(--surface);
+		box-shadow: 4px 4px 0 var(--border);
+		align-self: start;
+	}
+
 	.ground-intro h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 1rem; }
 	.ground-intro p:not(.ground-label) { color: var(--text-muted); line-height: 1.8; }
 	.ground-label { font: 0.65rem var(--font-mono); letter-spacing: 0.13em; color: var(--accent); margin-bottom: 1rem; }
@@ -158,6 +174,8 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 1.5rem;
+		gap: 0.75rem;
+		flex-wrap: wrap;
 	}
 
 	.see-all {
@@ -171,12 +189,25 @@
 	/* Post grid */
 	.post-grid {
 		display: grid;
-		gap: 1rem;
-		grid-template-columns: 1fr;
+		gap: clamp(1.25rem, 2vw, 2rem);
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	@media (min-width: 560px) {
-		.post-grid { grid-template-columns: repeat(2, 1fr); }
+		.post-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+
+	@media (min-width: 900px) {
+		.ground-content { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1.5rem, 3vw, 4rem); }
+		.ground-intro { grid-column: span 7; align-self: center; }
+		.currently { grid-column: span 5; margin-top: 0; }
+		.recent-projects, .recent-posts { grid-column: 1 / -1; }
+	}
+	@media (min-width: 1200px) {
+		.recent-projects { grid-column: span 7; }
+		.recent-posts { grid-column: span 5; }
+		.archive-divider { display: none; }
+		.recent-posts .post-grid { grid-template-columns: minmax(0, 1fr); }
 	}
 
 	.empty {

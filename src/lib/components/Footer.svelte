@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	const year = new Date().getFullYear();
 
 	const socials = [
@@ -8,7 +9,7 @@
 </script>
 
 <footer>
-	<div class="container">
+	<div class="container" class:home-footer={$page.url.pathname === "/"}>
 		<!-- IndieWeb h-card (hidden, for parsers) -->
 		<div class="h-card" hidden>
 			<a class="u-url u-uid" href="https://nielslarsen.dev" rel="me">nielslarsen.dev</a>
@@ -43,6 +44,8 @@
 		/* extra bottom padding clears the home-indicator on notched iPhones */
 		padding-block: 2rem calc(2.5rem + env(safe-area-inset-bottom));
 	}
+
+	.home-footer { max-width: none; padding-inline: clamp(1rem, 5vw, 7rem); }
 
 	.inner {
 		display: flex;
