@@ -1,4 +1,5 @@
 <script lang="ts">
+	import LaunchScene from '$lib/components/LaunchScene.svelte';
 	import PostCard from '$lib/components/PostCard.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import type { PageData } from './$types';
@@ -14,30 +15,15 @@
 	<meta property="og:url" content="https://nielslarsen.dev/" />
 </svelte:head>
 
-<div class="container">
-	<!-- Hero / h-card -->
-	<section class="hero h-card">
-		<div class="greeting">
-			<span class="hello">"Amaze,Amaze,Amaze!"</span>
-		</div>
+<LaunchScene />
 
-		<h1>
-			I'm <a class="p-name u-url" href="/" rel="me">Niels Leo Larsen 🚀</a>.
-		</h1>
-
-		<p class="bio p-note">
-			Aerospace Engineer by trade, Computer Enthusiast by passion. I work across the stack, from embedded systems to finite element analysis and computational fluid dynamics and even astrodynamics! 
-		</p>
-
-		<div class="links">
-			<a href="/about">more about me</a>
-			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://github.com/brasilius" rel="me noopener" target="_blank">github</a>
-			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">instagram</a>
-		</div>
-	</section>
-
+<div class="container ground-content" id="on-the-ground" tabindex="-1">
+	<div class="ground-intro">
+		<p class="ground-label">BACK ON THE GROUND</p>
+		<h2>A few things in my orbit.</h2>
+		<p>I work across the stack, from embedded systems to finite element analysis, computational fluid dynamics, and astrodynamics. This is where I keep what I’m building, learning, and figuring out along the way.</p>
+		<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">Field notes on Instagram ↗</a>
+	</div>
 	<hr />
 
 	<!-- Currently section -->
@@ -107,66 +93,11 @@
 		margin-block: 3rem;
 	}
 
-	/* Hero */
-	.hero {
-		padding-top: 3rem;
-		padding-bottom: 1rem;
-	}
-
-	.greeting {
-		margin-bottom: 1rem;
-	}
-
-	.hello {
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		color: var(--accent);
-		background: var(--accent-glow);
-		border: 1px solid var(--accent-ring);
-		padding: 0.25rem 0.75rem;
-		border-radius: 99px;
-	}
-
-	h1 {
-		font-size: clamp(2rem, 5vw, 3rem);
-		font-weight: 700;
-		letter-spacing: -0.04em;
-		color: var(--text);
-		margin-top: 1.25rem;
-		margin-bottom: 1rem;
-	}
-
-	h1 a {
-		color: inherit;
-		background: linear-gradient(135deg, var(--accent) 0%, var(--warm) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.bio {
-		font-size: 1.1rem;
-		color: var(--text-muted);
-		max-width: 52ch;
-		line-height: 1.7;
-		margin-bottom: 1.75rem;
-	}
-
-	.links {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		flex-wrap: wrap;
-	}
-
-	.links a {
-		color: var(--text-muted);
-		transition: color var(--t);
-	}
-	.links a:hover { color: var(--accent); }
-	.sep { color: var(--text-faint); }
+	.ground-content { padding-top: 4rem; scroll-margin-top: calc(var(--nav-height) + 1.5rem); }
+	.ground-intro h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 1rem; }
+	.ground-intro p:not(.ground-label) { color: var(--text-muted); line-height: 1.8; }
+	.ground-label { font: 0.65rem var(--font-mono); letter-spacing: 0.13em; color: var(--accent); margin-bottom: 1rem; }
+	.ground-intro a { display: inline-block; margin-top: 1rem; font: 0.75rem var(--font-mono); }
 
 	/* Currently */
 	.currently ul {
