@@ -3,6 +3,9 @@
 	import PixelLogo from './PixelLogo.svelte';
 
 	let journey: HTMLElement;
+	let scene: HTMLDivElement;
+	let flightArt: SVGSVGElement;
+	let towerTravel = $state(630);
 	let progress = $state(0);
 	let reducedMotion = $state(false);
 	let paused = $state(false);
@@ -34,12 +37,21 @@
 		const update = () => {
 			frame = 0;
 			const rect = journey.getBoundingClientRect();
-			const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nav-height')) || 60;
-			progress = clamp((navHeight - rect.top) / Math.max(1, journey.offsetHeight - (window.innerHeight - navHeight)));
+			// Use the actual sticky geometry, including safe areas and Safari's toolbar.
+			const sceneRect = scene.getBoundingClientRect();
+			progress = clamp((sceneRect.top - rect.top) / Math.max(1, rect.height - sceneRect.height));
+			// Terrain and tower use different SVG scales, but must descend at the same
+			// speed in screen pixels so the launchpad stays attached to the ground.
+			const vehicleScale = Math.min(flightArt.clientWidth / 230, flightArt.clientHeight / 500);
+			if (vehicleScale > 0) towerTravel = (630 * scene.clientHeight / 650) / vehicleScale;
 		};
 		const schedule = () => { if (!frame) frame = requestAnimationFrame(update); };
 		const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
 		observer.observe(journey);
+		const sizeObserver = new ResizeObserver(schedule);
+		sizeObserver.observe(scene);
+		sizeObserver.observe(journey);
+		sizeObserver.observe(flightArt);
 		preference.addEventListener('change', updatePreference);
 		window.addEventListener('scroll', schedule, { passive: true });
 		window.addEventListener('resize', schedule);
@@ -47,6 +59,7 @@
 		return () => {
 			cancelAnimationFrame(frame);
 			observer.disconnect();
+			sizeObserver.disconnect();
 			preference.removeEventListener('change', updatePreference);
 			window.removeEventListener('scroll', schedule);
 			window.removeEventListener('resize', schedule);
@@ -55,7 +68,7 @@
 </script>
 
 <section class="journey" class:ready class:still class:reduced={reducedMotion} class:asleep={!visible} bind:this={journey} aria-label="Making things fly — a scroll-driven pixel rocket launch">
-	<div class="stage" style={`--flight: ${flight}; --ignition: ${clamp(flight * 12)};`}>
+	<div class="stage" bind:this={scene} style={`--flight: ${flight}; --ignition: ${clamp(flight * 12)};`}>
 		<div class="scene-art" aria-hidden="true">
 			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<rect width="1000" height="650" fill="var(--sky)" />
@@ -67,11 +80,7 @@
 						</g>
 					{/each}
 				</g>
-				<g style={`transform: translateY(${Math.round(35 + flight * 95)}px); opacity: ${1 - flight * 0.45}`}>
-					<path d="M817 62h40v8h16v12h8v40h-8v12h-16v8h-40v-8h-16v-12h-8V82h8V70h16Z" fill="var(--moon)" />
-					<path d="M817 62h16v8h-8v12h-8v32h8v12h16v8h16v8h-40v-8h-16v-12h-8V82h8V70h16Z" fill="var(--moon-shade)" />
-					<path d="M849 84h8v8h-8zM833 110h12v8h-12z" fill="var(--moon-shade)" />
-				</g>
+
 				<g class="high-cloud" style={`transform: translate(${Math.round(-flight * 100)}px, ${Math.round(flight * 310)}px); opacity: ${1 - flight}`} fill="var(--cloud)">
 					<path d="M520 230h30v-8h50v8h30v8h25v8H495v-8h25zM860 282h24v-10h42v10h36v8h-102z" />
 				</g>
@@ -93,8 +102,14 @@
 				</g>
 
 			</svg>
-			<svg class="flight-art" viewBox="560 100 230 500" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges">
-				<g style={`transform: translateY(${Math.round(flight * 630)}px)`}>
+			<!-- A square, independent viewport preserves the moon's pixel-circle silhouette. -->
+			<svg class="moon-art" viewBox="0 0 88 88" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style={`transform: translateY(${Math.round(flight * 95)}px)`}>
+				<path d="M24 0h40v8h16v12h8v48h-8v12H64v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon)" />
+				<path d="M24 0h16v8H24v12h-8v40h8v12h16v8h24v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon-shade)" />
+				<path d="M56 24h8v8h-8zM40 54h12v8H40z" fill="var(--moon-shade)" />
+			</svg>
+			<svg class="flight-art" bind:this={flightArt} viewBox="560 100 230 500" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges">
+				<g class="launch-tower" style={`transform: translateY(${Math.round(flight * towerTravel)}px)`}>
 					<!-- Open steel launch gantry. -->
 					<path d="M599 564V363h5v201M637 564V363h5v201M599 363h43v5h-43M599 400h43M599 440h43M599 480h43M599 520h43M604 368l33 32-33 40 33 40-33 40 33 39" fill="none" stroke="var(--gantry)" stroke-width="4" />
 					<path d="M639 410h47v5h-47zM639 482h47v5h-47z" fill="var(--gantry)" />
@@ -160,14 +175,16 @@
 </section>
 
 <style>
-	.journey { --sky: #11140f; --leaf: #9dc87a; --leaf-dark: #587346; --sand: #c8a96e; --cream: #e2d9c8; --rust: #b9784c; --moon: #b9b68a; --moon-shade: #878961; --cloud: #343d2e; --smoke: #68715a; --mountain-far: #252e21; --mountain-lit: #343d2b; --mountain-near: #3b4931; --ground: #1b2419; --terrain-detail: #46533a; --gantry: #637153; position: relative; margin-top: -3rem; }
+	.journey { --sky: #11140f; --leaf: #9dc87a; --leaf-dark: #587346; --sand: #c8a96e; --cream: #e2d9c8; --rust: #b9784c; --moon: #ffffff; --moon-shade: #c4ccd4; --cloud: #343d2e; --smoke: #68715a; --mountain-far: #252e21; --mountain-lit: #343d2b; --mountain-near: #3b4931; --ground: #1b2419; --terrain-detail: #46533a; --gantry: #637153; position: relative; margin-top: -3rem; }
 	.journey.ready:not(.reduced) { height: 300svh; }
-	.stage { position: sticky; top: calc(var(--nav-height) + env(safe-area-inset-top)); height: calc(100svh - var(--nav-height) - env(safe-area-inset-top)); min-height: 620px; overflow: hidden; background: var(--sky); --inset: clamp(1rem, 5vw, 7rem); --panel: #11180f; --copy: #d5dccb; --panel-border: #536247; }
+	.stage { position: sticky; top: calc(var(--nav-height) + env(safe-area-inset-top)); height: calc(100dvh - var(--nav-height) - env(safe-area-inset-top)); min-height: 620px; overflow: hidden; background: var(--sky); --inset: clamp(1rem, 5vw, 7rem); --panel: #11180f; --copy: #d5dccb; --panel-border: #536247; }
 	.scene-art { position: absolute; inset: 0; pointer-events: none; }
 	/* Terrain fills the screen; the vehicle uses a separate, aspect-preserving viewport.
 	   Its scale is the smaller fraction of the available width and height. */
+	.moon-art { position: absolute; top: 17%; right: 12%; width: min(clamp(48px, 9vw, 144px), 16svh); height: auto; aspect-ratio: 1; overflow: visible; }
 	.landscape { width: 100%; height: 100%; display: block; }
-	.flight-art { position: absolute; width: 34%; height: 84%; right: 8%; bottom: 9%; overflow: hidden; }
+	/* Only the outer stage clips departing scenery; this viewport is for scaling. */
+	.flight-art { position: absolute; width: 34%; height: 84%; right: 8%; bottom: 9%; overflow: visible; }
 	.scene-content { position: relative; width: 100%; height: 100%; }
 	.scene-topline, .scene-bottomline { position: absolute; left: var(--inset); right: var(--inset); display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--copy); font: 0.75rem/1.5 var(--font-mono); }
 	.scene-topline { top: 1rem; letter-spacing: 0.04em; }
@@ -203,12 +220,13 @@
 	@keyframes twinkle { 0%, 75%, 100% { opacity: 0.8; } 40% { opacity: 0.3; } }
 	@keyframes burn { from { transform: scaleY(0.78); } to { transform: scaleY(1.15); } }
 	@keyframes vent { from { transform: translate(0, 0); opacity: 0.8; } to { transform: translate(var(--drift), -12px); opacity: 0.2; } }
-	:global([data-theme='light']) .journey { --sky: #e9e7d6; --leaf: #527b39; --leaf-dark: #496538; --sand: #876536; --cream: #2a3824; --moon: #c7b88c; --moon-shade: #ae9c70; --cloud: #ccd0b6; --smoke: #a3af91; --mountain-far: #c5c9ac; --mountain-lit: #d6d4b7; --mountain-near: #a5b38b; --ground: #c1c7a6; --terrain-detail: #8c9d75; --gantry: #7d896b; }
+	:global([data-theme='light']) .journey { --sky: #e9e7d6; --leaf: #527b39; --leaf-dark: #496538; --sand: #876536; --cream: #2a3824; --moon: #ffffff; --moon-shade: #c4ccd4; --cloud: #ccd0b6; --smoke: #a3af91; --mountain-far: #c5c9ac; --mountain-lit: #d6d4b7; --mountain-near: #a5b38b; --ground: #c1c7a6; --terrain-detail: #8c9d75; --gantry: #7d896b; }
 	:global([data-theme='light']) .stage { --panel: #f1f1e3; --copy: #38452f; --panel-border: #829371; }
 	@media (max-width: 850px) {
 		.stage { --inset: 1rem; min-height: 660px; }
 		.scene-topline { font-size: 0.6875rem; }
 		.edition { display: none; }
+		.moon-art { top: 49%; right: 9%; width: clamp(36px, 8vw, 64px); }
 		.intro { top: 3.4rem; width: calc(100% - 2rem); padding: 1rem; }
 		.pixel-logo { width: clamp(150px, 35vw, 220px); margin-bottom: 0.75rem; }
 		.greeting { font-size: 0.75rem; margin-bottom: 0.75rem; }
