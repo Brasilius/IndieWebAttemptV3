@@ -5,6 +5,8 @@
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+	// Each two-column project row shares two tracks with the writing column.
+	let archiveRows = $derived(Math.max(2, Math.ceil(data.projects.length / 2) * 2, data.posts.length));
 </script>
 
 <svelte:head>
@@ -41,6 +43,7 @@
 
 	<hr />
 
+	<div class="recent-content" style={`--archive-rows: ${archiveRows}`} >
 	<!-- Recent projects -->
 	<section class="recent-projects">
 		<div class="section-header">
@@ -85,6 +88,7 @@
 		{/if}
 	</section>
 
+	</div>
 </div>
 
 <style>
@@ -186,6 +190,8 @@
 	}
 	.see-all:hover { color: var(--accent); }
 
+	.recent-content { grid-column: 1 / -1; min-width: 0; }
+
 	/* Post grid */
 	.post-grid {
 		display: grid;
@@ -204,9 +210,25 @@
 		.recent-projects, .recent-posts { grid-column: 1 / -1; }
 	}
 	@media (min-width: 1200px) {
-		.recent-projects { grid-column: span 7; }
-		.recent-posts { grid-column: span 5; }
+		.recent-content {
+			display: grid;
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			grid-template-rows: auto repeat(var(--archive-rows), minmax(auto, 1fr));
+			column-gap: clamp(1.5rem, 3vw, 4rem);
+			row-gap: clamp(1.25rem, 2vw, 2rem);
+		}
+		.recent-projects, .recent-posts {
+			display: grid;
+			grid-template-rows: subgrid;
+			grid-row: 1 / -1;
+			min-width: 0;
+		}
+		.recent-projects { grid-column: 1 / span 7; }
+		.recent-posts { grid-column: 8 / span 5; }
+		.section-header { margin-bottom: 0; }
 		.archive-divider { display: none; }
+		.post-grid { grid-row: 2 / -1; grid-template-rows: subgrid; }
+		.recent-projects .post-grid :global(.pixel-card) { grid-row: span 2; }
 		.recent-posts .post-grid { grid-template-columns: minmax(0, 1fr); }
 	}
 
