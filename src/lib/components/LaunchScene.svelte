@@ -60,7 +60,7 @@
 <section class="journey" class:ready class:still class:reduced={reducedMotion} class:asleep={!visible} bind:this={journey} aria-label="Making things fly — a scroll-driven pixel rocket launch">
 	<div class="stage" style={`--flight: ${flight}; --ignition: ${clamp(flight * 12)};`}>
 		<div class="scene-art" aria-hidden="true">
-			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMax slice" shape-rendering="crispEdges">
+			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<rect width="1000" height="650" fill="var(--sky)" />
 				<g class="stars" style={`opacity: ${0.25 + flight * 0.75}; transform: translateY(${Math.round(flight * 65)}px)`}>
 					{#each stars as star, i}
@@ -92,6 +92,12 @@
 					<path d="M238 581v-26h5v12h8v-18h5v23h-13v9zM913 577v-25h5v8h9v-15h5v21h-14v11z" fill="var(--leaf-dark)" />
 					<path d="M351 575v-29h9v-9h43v9h9v29z" fill="var(--terrain-detail)" />
 					<path d="M361 549h14v10h-14zM386 549h15v10h-15z" fill="var(--leaf)" />
+
+				</g>
+
+			</svg>
+			<svg class="flight-art" viewBox="560 100 230 500" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges">
+				<g style={`transform: translateY(${Math.round(flight * 630)}px)`}>
 					<!-- Open steel launch gantry. -->
 					<path d="M599 564V363h5v201M637 564V363h5v201M599 363h43v5h-43M599 400h43M599 440h43M599 480h43M599 520h43M604 368l33 32-33 40 33 40-33 40 33 39" fill="none" stroke="var(--gantry)" stroke-width="4" />
 					<path d="M639 410h38v5h-38zM639 482h38v5h-38z" fill="var(--gantry)" />
@@ -133,7 +139,7 @@
 		</div>
 
 		<div class="scene-content">
-			<div class="scene-topline"><span>NIELS LEO LARSEN / PERSONAL EXPLORATIONS</span><span class="edition">EST. ON EARTH</span></div>
+			<div class="scene-topline"><span>NIELS LEO LARSEN<span class="descriptor"> / PERSONAL EXPLORATIONS</span></span><span class="edition">EST. ON EARTH</span></div>
 			<div class="intro h-card">
 				<p class="greeting">“Amaze, amaze, amaze!”</p>
 				<a href="/about" class="pixel-logo" aria-label="Leo — more about me">
@@ -168,35 +174,39 @@
 <style>
 	.journey { --sky: #11140f; --leaf: #9dc87a; --leaf-dark: #587346; --sand: #c8a96e; --cream: #e2d9c8; --rust: #b9784c; --moon: #b9b68a; --moon-shade: #878961; --cloud: #343d2e; --smoke: #68715a; --mountain-far: #252e21; --mountain-lit: #343d2b; --mountain-near: #3b4931; --ground: #1b2419; --terrain-detail: #46533a; --gantry: #637153; position: relative; margin-top: -3rem; }
 	.journey.ready:not(.reduced) { height: 300svh; }
-	.stage { position: sticky; top: calc(var(--nav-height) + env(safe-area-inset-top)); height: calc(100svh - var(--nav-height) - env(safe-area-inset-top)); min-height: 650px; overflow: hidden; background: var(--sky); }
+	.stage { position: sticky; top: calc(var(--nav-height) + env(safe-area-inset-top)); height: calc(100svh - var(--nav-height) - env(safe-area-inset-top)); min-height: 620px; overflow: hidden; background: var(--sky); --inset: clamp(1rem, 5vw, 7rem); --panel: #11180f; --copy: #d5dccb; --panel-border: #536247; }
 	.scene-art { position: absolute; inset: 0; pointer-events: none; }
+	/* Terrain fills the screen; the vehicle uses a separate, aspect-preserving viewport.
+	   Its scale is the smaller fraction of the available width and height. */
 	.landscape { width: 100%; height: 100%; display: block; }
-	.scene-content { position: relative; width: min(1200px, 100%); margin: auto; height: 100%; padding: 0 3rem; }
-	.scene-topline, .scene-bottomline { position: absolute; left: 3rem; right: 3rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: #b9bea9; font: 0.65rem var(--font-mono); letter-spacing: 0.09em; }
-	.scene-topline { top: 1.7rem; }
-	.scene-bottomline { bottom: 1.6rem; letter-spacing: 0; }
-	.intro { position: absolute; top: 15%; left: 3rem; max-width: 55%; }
-	.greeting { color: var(--sand); font: 0.8rem var(--font-mono); margin-bottom: 1.3rem; }
-	.pixel-logo { display: block; width: clamp(210px, 26vw, 350px); margin-bottom: 1.5rem; }
+	.flight-art { position: absolute; width: 34%; height: 84%; right: 8%; bottom: 9%; overflow: hidden; }
+	.scene-content { position: relative; width: 100%; height: 100%; }
+	.scene-topline, .scene-bottomline { position: absolute; left: var(--inset); right: var(--inset); display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: var(--copy); font: 0.75rem/1.5 var(--font-mono); }
+	.scene-topline { top: 1rem; letter-spacing: 0.04em; }
+	.scene-topline > span { background: var(--panel); padding: 0.4rem 0.6rem; }
+	.scene-bottomline { bottom: 1rem; background: var(--panel); border: 1px solid var(--panel-border); padding: 0.25rem 1rem; }
+	.intro { position: absolute; top: 12%; left: var(--inset); width: min(48%, 650px); padding: clamp(1rem, 2vw, 2rem); background: var(--panel); border-left: 2px solid var(--leaf); }
+	.greeting { color: var(--sand); font: 0.85rem/1.5 var(--font-mono); margin-bottom: 1rem; }
+	.pixel-logo { display: block; width: clamp(210px, 26vw, 350px); max-width: 100%; margin-bottom: 1.25rem; }
 	.pixel-logo svg { width: 100%; display: block; overflow: visible; }
 	.logo-pixel { fill: var(--leaf); animation: phosphor 6s steps(1) infinite; animation-delay: var(--delay); }
-	h1 { font-size: clamp(1.8rem, 3.5vw, 3.2rem); letter-spacing: -0.055em; color: var(--cream); margin-bottom: 1rem; }
+	h1 { font-size: clamp(1.5rem, 2.7vw, 2.6rem); letter-spacing: -0.05em; color: var(--cream); margin-bottom: 1rem; }
 	h1 span { color: var(--leaf); }
-	.bio { color: #bec2ae; font-size: clamp(0.9rem, 1.3vw, 1rem); line-height: 1.8; }
+	.bio { color: var(--copy); font-size: clamp(0.875rem, 1.15vw, 1.05rem); line-height: 1.8; }
 	.bio a { color: var(--cream); }
-	.intro-links { display: flex; gap: 1.8rem; margin-top: 1.5rem; font: 0.75rem var(--font-mono); }
-	.intro-links a { color: var(--leaf); padding-block: 0.6rem; border-bottom: 1px solid #4a583c; }
+	.intro-links { display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; margin-top: 1rem; font: 0.8rem/1.5 var(--font-mono); }
+	.intro-links a { color: var(--leaf); padding-block: 0.6rem; border-bottom: 1px solid var(--panel-border); }
 	.intro-links a:hover { color: var(--cream); border-color: var(--cream); }
-	.flight-caption { position: absolute; bottom: 14%; left: 3rem; max-width: 42%; }
-	.chapter { color: var(--sand); font: 0.6rem var(--font-mono); letter-spacing: 0.13em; }
-	.flight-caption p { color: var(--cream); font-size: 1.3rem; margin: 0.2rem 0; letter-spacing: -0.03em; }
-	.note { color: #b9bea9; font: 0.7rem/1.7 var(--font-mono); }
-	.scene-actions { display: flex; align-items: center; gap: 1.6rem; }
-	.scene-actions a, button { color: var(--cream); font: 0.65rem var(--font-mono); padding: 0.65rem 0; }
+	.flight-caption { position: absolute; bottom: 13%; left: var(--inset); width: min(43%, 540px); padding: 1rem 1.25rem; background: var(--panel); border: 1px solid var(--panel-border); }
+	.chapter { color: var(--sand); font: 0.75rem/1.5 var(--font-mono); letter-spacing: 0.06em; }
+	.flight-caption p { color: var(--cream); font-size: 1.1rem; margin: 0.4rem 0; }
+	.note { color: var(--copy); font: 0.8rem/1.7 var(--font-mono); }
+	.scene-actions { display: flex; align-items: center; gap: 1.5rem; }
+	.scene-actions a, button { color: var(--cream); font: 0.75rem/1.5 var(--font-mono); padding: 0.7rem 0; min-height: 44px; }
 	button { border: 0; background: none; cursor: pointer; }
 	.scene-actions a:hover, button:hover { color: var(--leaf); }
 	.scroll-cue { display: flex; align-items: center; gap: 0.7rem; color: var(--leaf); }
-	.flight-track { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: #343d2e; }
+	.flight-track { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--panel-border); }
 	.flight-track span { display: block; width: 100%; height: 100%; background: var(--leaf); transform-origin: left; }
 	.star { animation: twinkle 5s steps(1) infinite; animation-delay: var(--delay); }
 	.beacon { animation: twinkle 2s steps(1) infinite; }
@@ -208,45 +218,49 @@
 	@keyframes burn { from { transform: scaleY(0.78); } to { transform: scaleY(1.15); } }
 	@keyframes vent { from { transform: translate(0, 0); opacity: 0.8; } to { transform: translate(var(--drift), -12px); opacity: 0.2; } }
 	:global([data-theme='light']) .journey { --sky: #e9e7d6; --leaf: #527b39; --leaf-dark: #496538; --sand: #876536; --cream: #2a3824; --moon: #c7b88c; --moon-shade: #ae9c70; --cloud: #ccd0b6; --smoke: #a3af91; --mountain-far: #c5c9ac; --mountain-lit: #d6d4b7; --mountain-near: #a5b38b; --ground: #c1c7a6; --terrain-detail: #8c9d75; --gantry: #7d896b; }
-	:global([data-theme='light']) .bio, :global([data-theme='light']) .scene-topline, :global([data-theme='light']) .note { color: #536046; }
-	@media (min-width: 1600px) { .landscape { width: 1600px; position: absolute; left: 50%; transform: translateX(-50%); } }
-	@media (max-width: 700px) {
-		.stage { min-height: 720px; }
-		.journey.ready:not(.reduced) { height: 280svh; }
-		.scene-content { padding-inline: 1.5rem; }
-		.scene-topline, .scene-bottomline { left: 1.5rem; right: 1.5rem; }
-		.scene-topline { font-size: 0.55rem; }
+	:global([data-theme='light']) .stage { --panel: #f1f1e3; --copy: #38452f; --panel-border: #829371; }
+	@media (max-width: 850px) {
+		.stage { --inset: 1rem; min-height: 660px; }
+		.scene-topline { font-size: 0.6875rem; }
 		.edition { display: none; }
-		.intro { top: 10%; left: 1.5rem; max-width: calc(100% - 3rem); }
-		.pixel-logo { width: 195px; margin-bottom: 1rem; }
-		.greeting { margin-bottom: 1rem; font-size: 0.7rem; }
-		h1 { font-size: 2rem; }
-		.bio { font-size: 0.85rem; }
-		.intro-links { margin-top: 0.75rem; gap: 1.2rem; font-size: 0.7rem; }
-		.landscape { width: 700px; max-width: none; height: 455px; position: absolute; right: -150px; bottom: 0; }
-		.flight-caption { left: 1.5rem; bottom: 15%; max-width: 43%; }
-		.flight-caption p { font-size: 1.1rem; line-height: 1.3; }
+		.intro { top: 3.4rem; width: calc(100% - 2rem); padding: 1rem; }
+		.pixel-logo { width: clamp(150px, 35vw, 220px); margin-bottom: 0.75rem; }
+		.greeting { font-size: 0.75rem; margin-bottom: 0.75rem; }
+		h1 { font-size: clamp(1.25rem, 4vw, 1.8rem); margin-bottom: 0.6rem; }
+		.bio { font-size: 0.8125rem; line-height: 1.65; }
+		.intro-links { margin-top: 0.5rem; font-size: 0.75rem; }
+		.flight-art { width: 49%; height: 42%; right: 0; bottom: 12%; }
+		.flight-caption { bottom: 17%; width: 47%; padding: 0.75rem; }
+		.flight-caption p { font-size: 0.9375rem; }
+		.chapter { font-size: 0.6875rem; }
 		.note { display: none; }
-		.chapter { font-size: 0.5rem; }
-		.scene-bottomline { bottom: 1rem; align-items: start; font-size: 0.6rem; }
-		.scene-actions { align-items: end; flex-direction: column; gap: 0; }
-		.scene-actions a, button { font-size: 0.6rem; padding-block: 0.4rem; }
-		.scroll-cue { padding-block: 0.4rem; }
+		.scene-bottomline { bottom: 0.6rem; padding: 0.2rem 0.65rem; flex-wrap: wrap; gap: 0; font-size: 0.75rem; }
+		.scene-actions { justify-content: space-between; flex: 1 1 100%; gap: 0.5rem; }
+		.scroll-cue { padding-top: 0.2rem; }
 	}
-	@media (max-height: 740px) {
-		.stage { min-height: 500px; }
-		.intro { top: 11%; }
-		.pixel-logo { width: 160px; margin-bottom: 0.8rem; }
-		.greeting { font-size: 0.65rem; margin-bottom: 0.8rem; }
-		h1 { font-size: 1.7rem; margin-bottom: 0.6rem; }
-		.bio { font-size: 0.8rem; }
+	@media (min-width: 851px) and (max-height: 950px) {
+		.intro { top: 10%; padding: 1rem 1.25rem; }
+		.pixel-logo { width: clamp(180px, 22vw, 260px); margin-bottom: 0.75rem; }
+		.greeting { margin-bottom: 0.6rem; }
+		h1 { font-size: clamp(1.4rem, 2.5vw, 2rem); margin-bottom: 0.6rem; }
+		.bio { font-size: 0.875rem; }
 		.intro-links { margin-top: 0.5rem; }
-		.flight-caption { bottom: 15%; }
+		.flight-caption { bottom: 13%; padding: 0.65rem 1rem; }
 		.note { display: none; }
 	}
-	@media (max-width: 360px) {
-		.bio { max-width: 210px; font-size: 0.75rem; }
-		.intro-links { gap: 1rem; font-size: 0.65rem; }
+	@media (max-width: 850px) and (max-height: 740px) {
+		.stage { min-height: 0; }
+		.pixel-logo { width: 95px; margin-bottom: 0.5rem; }
+		.greeting { display: none; }
+		.intro { padding: 0.75rem; }
+		.greeting { margin-bottom: 0.5rem; }
+		.bio { font-size: 0.75rem; }
+		.flight-art { height: 30%; bottom: 17%; }
+		.flight-caption { bottom: 19%; padding: 0.6rem; }
+		.chapter { font-size: 0.625rem; letter-spacing: 0; }
+		.flight-caption p { font-size: 0.875rem; }
 	}
+	@media (max-width: 600px) { .descriptor { display: none; } }
+	@media (max-height: 550px) { .stage { min-height: 590px; } }
 	@media (prefers-reduced-motion: reduce) { .journey.ready:not(.reduced) { height: auto; } .journey * { animation: none !important; } }
 </style>

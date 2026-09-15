@@ -12,7 +12,7 @@
 
 	/* Text */
 	--text:       #E2D9C8;
-	--text-muted: #756E60;
+	--text-muted: #AAA391;
 	--text-faint: #413D35;
 
 	/* Accent — lighter matcha green */
@@ -26,8 +26,8 @@
 	--warm-glow: rgba(200, 169, 110, 0.10);
 
 	/* Typography */
-	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-	--font-mono: 'IBM Plex Mono', 'SF Mono', 'Fira Code', monospace;
+	--font-sans: var(--font-mono);
+	--font-mono: 'SF Mono', SFMono-Regular, ui-monospace, 'IBM Plex Mono', Menlo, Consolas, monospace;
 
 	/* Geometry */
 	--radius:     6px;
@@ -49,7 +49,7 @@
 	--border:    #CEC8B8;
 
 	--text:       #1C1A16;
-	--text-muted: #7A7163;
+	--text-muted: #635B4E;
 	--text-faint: #B0A898;
 
 	--accent:      #4E8A2C;
