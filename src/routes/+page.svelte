@@ -1,9 +1,12 @@
 <script lang="ts">
+	import LaunchScene from '$lib/components/LaunchScene.svelte';
 	import PostCard from '$lib/components/PostCard.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import type { PageData } from './$types';
 
 	let { data }: { data: PageData } = $props();
+	// Each two-column project row shares two tracks with the writing column.
+	let archiveRows = $derived(Math.max(2, Math.ceil(data.projects.length / 2) * 2, data.posts.length));
 </script>
 
 <svelte:head>
@@ -14,31 +17,15 @@
 	<meta property="og:url" content="https://nielslarsen.dev/" />
 </svelte:head>
 
-<div class="container">
-	<!-- Hero / h-card -->
-	<section class="hero h-card">
-		<div class="greeting">
-			<span class="hello">"Amaze,Amaze,Amaze!"</span>
-		</div>
+<LaunchScene />
 
-		<h1>
-			I'm <a class="p-name u-url" href="/" rel="me">Niels Leo Larsen 🚀</a>.
-		</h1>
-
-		<p class="bio p-note">
-			Aerospace Engineer by trade, Computer Enthusiast by passion. I work across the stack, from embedded systems to finite element analysis and computational fluid dynamics and even astrodynamics! 
-		</p>
-
-		<div class="links">
-			<a href="/about">more about me</a>
-			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://github.com/brasilius" rel="me noopener" target="_blank">github</a>
-			<span class="sep" aria-hidden="true">·</span>
-			<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">instagram</a>
-		</div>
-	</section>
-
-	<hr />
+<div class="container ground-content" id="on-the-ground" tabindex="-1">
+	<div class="ground-intro">
+		<p class="ground-label">BACK ON THE GROUND</p>
+		<h2>A few things in my orbit.</h2>
+		<p>I work across the stack, from embedded systems to finite element analysis, computational fluid dynamics, and astrodynamics. This is where I keep what I’m building, learning, and figuring out along the way.</p>
+		<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">Field notes on Instagram ↗</a>
+	</div>
 
 	<!-- Currently section -->
 	<section class="currently">
@@ -56,6 +43,7 @@
 
 	<hr />
 
+	<div class="recent-content" style={`--archive-rows: ${archiveRows}`} >
 	<!-- Recent projects -->
 	<section class="recent-projects">
 		<div class="section-header">
@@ -69,7 +57,7 @@
 		{#if data.projects.length}
 			<div class="post-grid">
 				{#each data.projects as project}
-					<ProjectCard {project} />
+					<ProjectCard {project} detailed />
 				{/each}
 			</div>
 		{:else}
@@ -77,7 +65,7 @@
 		{/if}
 	</section>
 
-	<hr />
+	<hr class="archive-divider" />
 
 	<!-- Recent posts -->
 	<section class="recent-posts">
@@ -100,73 +88,36 @@
 		{/if}
 	</section>
 
+	</div>
 </div>
 
 <style>
 	hr {
-		margin-block: 3rem;
+		margin-block: clamp(2rem, 4vw, 4rem);
+		grid-column: 1 / -1;
 	}
 
-	/* Hero */
-	.hero {
-		padding-top: 3rem;
-		padding-bottom: 1rem;
+	.ground-content {
+		max-width: none;
+		padding-inline: clamp(1rem, 5vw, 7rem);
+		padding-top: clamp(2.5rem, 5vw, 5rem);
+		scroll-margin-top: calc(var(--nav-height) + 1.5rem);
+	}
+	.ground-content > * { min-width: 0; }
+	.ground-intro { max-width: 68ch; }
+	.currently {
+		margin-top: 2rem;
+		padding: clamp(1.25rem, 2.5vw, 2.5rem);
+		border: 1px solid var(--border);
+		background: var(--surface);
+		box-shadow: 4px 4px 0 var(--border);
+		align-self: start;
 	}
 
-	.greeting {
-		margin-bottom: 1rem;
-	}
-
-	.hello {
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		color: var(--accent);
-		background: var(--accent-glow);
-		border: 1px solid var(--accent-ring);
-		padding: 0.25rem 0.75rem;
-		border-radius: 99px;
-	}
-
-	h1 {
-		font-size: clamp(2rem, 5vw, 3rem);
-		font-weight: 700;
-		letter-spacing: -0.04em;
-		color: var(--text);
-		margin-top: 1.25rem;
-		margin-bottom: 1rem;
-	}
-
-	h1 a {
-		color: inherit;
-		background: linear-gradient(135deg, var(--accent) 0%, var(--warm) 100%);
-		-webkit-background-clip: text;
-		-webkit-text-fill-color: transparent;
-		background-clip: text;
-	}
-
-	.bio {
-		font-size: 1.1rem;
-		color: var(--text-muted);
-		max-width: 52ch;
-		line-height: 1.7;
-		margin-bottom: 1.75rem;
-	}
-
-	.links {
-		display: flex;
-		align-items: center;
-		gap: 0.75rem;
-		font-family: var(--font-mono);
-		font-size: 0.85rem;
-		flex-wrap: wrap;
-	}
-
-	.links a {
-		color: var(--text-muted);
-		transition: color var(--t);
-	}
-	.links a:hover { color: var(--accent); }
-	.sep { color: var(--text-faint); }
+	.ground-intro h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: 1rem; }
+	.ground-intro p:not(.ground-label) { color: var(--text-muted); line-height: 1.8; }
+	.ground-label { font: 0.65rem var(--font-mono); letter-spacing: 0.13em; color: var(--accent); margin-bottom: 1rem; }
+	.ground-intro a { display: inline-block; margin-top: 1rem; font: 0.75rem var(--font-mono); }
 
 	/* Currently */
 	.currently ul {
@@ -217,7 +168,7 @@
 	.section-label .dot {
 		width: 6px;
 		height: 6px;
-		border-radius: 50%;
+		border-radius: 0;
 		background: var(--accent);
 		flex-shrink: 0;
 	}
@@ -227,6 +178,8 @@
 		align-items: center;
 		justify-content: space-between;
 		margin-bottom: 1.5rem;
+		gap: 0.75rem;
+		flex-wrap: wrap;
 	}
 
 	.see-all {
@@ -237,15 +190,46 @@
 	}
 	.see-all:hover { color: var(--accent); }
 
+	.recent-content { grid-column: 1 / -1; min-width: 0; }
+
 	/* Post grid */
 	.post-grid {
 		display: grid;
-		gap: 1rem;
-		grid-template-columns: 1fr;
+		gap: clamp(1.25rem, 2vw, 2rem);
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	@media (min-width: 560px) {
-		.post-grid { grid-template-columns: repeat(2, 1fr); }
+		.post-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+	}
+
+	@media (min-width: 900px) {
+		.ground-content { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: clamp(1.5rem, 3vw, 4rem); }
+		.ground-intro { grid-column: span 7; align-self: center; }
+		.currently { grid-column: span 5; margin-top: 0; }
+		.recent-projects, .recent-posts { grid-column: 1 / -1; }
+	}
+	@media (min-width: 1200px) {
+		.recent-content {
+			display: grid;
+			grid-template-columns: repeat(12, minmax(0, 1fr));
+			grid-template-rows: auto repeat(var(--archive-rows), minmax(auto, 1fr));
+			column-gap: clamp(1.5rem, 3vw, 4rem);
+			row-gap: clamp(1.25rem, 2vw, 2rem);
+		}
+		.recent-projects, .recent-posts {
+			display: grid;
+			grid-template-rows: subgrid;
+			grid-row: 1 / -1;
+			min-width: 0;
+		}
+		.recent-projects { grid-column: 1 / span 7; }
+		.recent-posts { grid-column: 8 / span 5; }
+		.section-header { margin-bottom: 0; }
+		.archive-divider { display: none; }
+		.post-grid { grid-row: 2 / -1; grid-template-rows: subgrid; }
+		.recent-projects .post-grid :global(.pixel-card) { grid-row: span 2; }
+		.recent-posts .post-grid { grid-template-columns: minmax(0, 1fr); }
 	}
 
 	.empty {

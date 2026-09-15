@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	const year = new Date().getFullYear();
 
 	const socials = [
@@ -8,7 +9,7 @@
 </script>
 
 <footer>
-	<div class="container">
+	<div class="container" class:home-footer={$page.url.pathname === "/"}>
 		<!-- IndieWeb h-card (hidden, for parsers) -->
 		<div class="h-card" hidden>
 			<a class="u-url u-uid" href="https://nielslarsen.dev" rel="me">nielslarsen.dev</a>
@@ -44,6 +45,8 @@
 		padding-block: 2rem calc(2.5rem + env(safe-area-inset-bottom));
 	}
 
+	.home-footer { max-width: none; padding-inline: clamp(1rem, 5vw, 7rem); }
+
 	.inner {
 		display: flex;
 		align-items: center;
@@ -61,7 +64,7 @@
 		color: var(--text-muted);
 	}
 
-	.sep { color: var(--text-faint); }
+	.sep { color: var(--text-muted); }
 
 	.left a {
 		color: var(--text-muted);
@@ -92,10 +95,10 @@
 	.badge {
 		font-family: var(--font-mono);
 		font-size: 0.68rem;
-		color: var(--text-faint);
+		color: var(--text-muted);
 		border: 1px solid var(--border);
 		padding: 0.15rem 0.55rem;
-		border-radius: 4px;
+		border-radius: 0;
 		transition: color var(--t), border-color var(--t);
 	}
 	.badge:hover {
