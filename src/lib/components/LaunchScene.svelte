@@ -258,8 +258,8 @@
 	@media (max-width: 850px) and (max-height: 740px) {
 		.stage { min-height: 0; }
 		.pixel-logo { width: 95px; margin-bottom: 0.5rem; }
-		.greeting { display: none; }
 		.intro { padding: 0.75rem; }
+		/* Keep the greeting visible even while the mobile browser toolbar is expanded. */
 		.greeting { margin-bottom: 0.5rem; }
 		.bio { font-size: 0.75rem; }
 		.flight-art { height: 30%; bottom: 17%; }
