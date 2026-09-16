@@ -70,7 +70,7 @@
 <section class="journey" class:ready class:still class:reduced={reducedMotion} class:asleep={!visible} bind:this={journey} aria-label="Making things fly — a scroll-driven pixel rocket launch">
 	<div class="stage" bind:this={scene} style={`--flight: ${flight}; --ignition: ${clamp(flight * 12)};`}>
 		<div class="scene-art" aria-hidden="true">
-			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
+			<svg class="sky-art" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<rect width="1000" height="650" fill="var(--sky)" />
 				<g class="stars" style={`opacity: ${0.25 + flight * 0.75}; transform: translateY(${Math.round(flight * 65)}px)`}>
 					{#each stars as star, i}
@@ -81,6 +81,15 @@
 					{/each}
 				</g>
 
+			</svg>
+			<!-- Keep the moon above the stars and behind clouds and terrain.
+			     A square, independent viewport preserves its pixel-circle silhouette. -->
+			<svg class="moon-art" viewBox="0 0 88 88" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style={`transform: translateY(${Math.round(flight * 95)}px)`}>
+				<path d="M24 0h40v8h16v12h8v48h-8v12H64v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon)" />
+				<path d="M24 0h16v8H24v12h-8v40h8v12h16v8h24v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon-shade)" />
+				<path d="M56 24h8v8h-8zM40 54h12v8H40z" fill="var(--moon-shade)" />
+			</svg>
+			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<g class="high-cloud" style={`transform: translate(${Math.round(-flight * 100)}px, ${Math.round(flight * 310)}px); opacity: ${1 - flight}`} fill="var(--cloud)">
 					<path d="M520 230h30v-8h50v8h30v8h25v8H495v-8h25zM860 282h24v-10h42v10h36v8h-102z" />
 				</g>
@@ -101,12 +110,6 @@
 
 				</g>
 
-			</svg>
-			<!-- A square, independent viewport preserves the moon's pixel-circle silhouette. -->
-			<svg class="moon-art" viewBox="0 0 88 88" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style={`transform: translateY(${Math.round(flight * 95)}px)`}>
-				<path d="M24 0h40v8h16v12h8v48h-8v12H64v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon)" />
-				<path d="M24 0h16v8H24v12h-8v40h8v12h16v8h24v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon-shade)" />
-				<path d="M56 24h8v8h-8zM40 54h12v8H40z" fill="var(--moon-shade)" />
 			</svg>
 			<svg class="flight-art" bind:this={flightArt} viewBox="560 100 230 500" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges">
 				<g class="launch-tower" style={`transform: translateY(${Math.round(flight * towerTravel)}px)`}>
@@ -182,7 +185,7 @@
 	/* Terrain fills the screen; the vehicle uses a separate, aspect-preserving viewport.
 	   Its scale is the smaller fraction of the available width and height. */
 	.moon-art { position: absolute; top: 17%; right: 12%; width: min(clamp(48px, 9vw, 144px), 16svh); height: auto; aspect-ratio: 1; overflow: visible; }
-	.landscape { width: 100%; height: 100%; display: block; }
+	.sky-art, .landscape { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 	/* Only the outer stage clips departing scenery; this viewport is for scaling. */
 	.flight-art { position: absolute; width: 34%; height: 84%; right: 8%; bottom: 9%; overflow: visible; }
 	.scene-content { position: relative; width: 100%; height: 100%; }
