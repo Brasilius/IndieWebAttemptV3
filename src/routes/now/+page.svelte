@@ -28,7 +28,7 @@
 			<h2>Reading</h2>
 			<ul>
 				<li>
-					<strong>The Fourth Wing</strong> - Rebeecca Yarros
+					<strong>The Fourth Wing</strong> - Rebecca Yarros
 					<span class="note">I had a really good friend recommend this to me!</span>
 				</li>
 				<li>
