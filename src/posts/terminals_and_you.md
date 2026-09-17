@@ -2,7 +2,7 @@
 title: Terminals and You!
 date: '2026-09-16'
 description: Its funny how we end up going full circle literally every year.
-tags: [work, industry, aerospace, computer science, software, AI]
+tags: [computer science, software, AI]
 published: true
 ---
 
