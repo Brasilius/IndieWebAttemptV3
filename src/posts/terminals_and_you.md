@@ -1,8 +1,8 @@
 ---
 title: Terminals and You!
-date: '2026-04-06'
-description: A fantastic experience, working on some of the most complex systems on Earth.
-tags: [work, industry, aerospace]
+date: '2026-09-16'
+description: Its funny how we end up going full circle literally every year.
+tags: [work, industry, aerospace, computer science, software, AI]
 published: true
 ---
 

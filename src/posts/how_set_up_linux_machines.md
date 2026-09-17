@@ -1,6 +1,6 @@
 ---
 title: How I Set Up Linux Machines for Work and Productivity
-date: '2026-04-19'
+date: '2026-06-15'
 description: Linux is often touted as inpractical for every day work - I genuinely disagree.
 tags: [linux, productivity, engineering]
 published: true
