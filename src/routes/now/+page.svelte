@@ -10,7 +10,7 @@
 			A snapshot of what I'm doing and thinking about.
 			Inspired by <a href="https://nownownow.com" rel="noopener" target="_blank">nownownow.com</a>.
 		</p>
-		<time class="updated" datetime="2026-04">Updated April 2026</time>
+		<time class="updated" datetime="2026-09">Updated September 2026</time>
 	</header>
 
 	<div class="now-sections prose">
@@ -18,9 +18,9 @@
 		<section>
 			<h2>Working on</h2>
 			<ul>
-				<li>Staying up WAAAY too late working on homework.</li>
-				<li>Not exploding 5,000$ carbon fiber rockets.</li>
-				<li>Getting a motor controller to work.</li>
+				<li>Automating production workflows using robotics and AI.</li>
+				<li>Figuring out un-ending radio issues.</li>
+				<li>Becoming the Jira and Confluence final boss.</li>
 			</ul>
 		</section>
 
@@ -28,12 +28,12 @@
 			<h2>Reading</h2>
 			<ul>
 				<li>
-					<strong>Project Hail Mary</strong> - Andy Weir
-					<span class="note">The movie convinced me to do it.</span>
+					<strong>The Fourth Wing</strong> - Rebeecca Yarros
+					<span class="note">I had a really good friend recommend this to me!</span>
 				</li>
 				<li>
-					<strong>Dune Part One</strong> - Frank Herbert
-					<span class="note">On a similar story to Hail Mary, I need to lock in before movie 3.</span>
+					<strong>Project Hail Mary</strong> - Andy Weir
+					<span class="note">On a different note, Dr.Grace is still fighing for his life in my head cannon.</span>
 				</li>
 			</ul>
 		</section>
@@ -41,21 +41,21 @@
 		<section>
 			<h2>Listening to</h2>
 			<ul>
-				<li>Spaghetti - LE SSERAFIM</li>
-				<li>Fall Up - Voila</li>
+				<li>Hiring Eddie - Paul Leonard-Morgan</li>
+				<li>The Peace - The Underscores</li>
 			</ul>
 		</section>
 
 		<section>
 			<h2>Thinking about</h2>
 			<p>
-			FINDING A JOB PLEAAAAAAAAAAAAAASE.
+			How do you overoptimize a job?
 			</p>
 		</section>
 
 		<section>
 			<h2>Location</h2>
-			<p>Home, sipping a coffee. </p>
+			<p>In the Gundo, integrating and testing new tech! </p>
 		</section>
 
 	</div>
