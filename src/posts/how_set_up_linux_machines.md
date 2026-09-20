@@ -1,5 +1,5 @@
 ---
-title: How I Set Up Linux Machines for Work and Productivity
+title: How I Set Up Linux Machines for Work and Productivity.
 date: '2026-06-15'
 description: Linux is often touted as inpractical for every day work - I genuinely disagree.
 tags: [linux, productivity, engineering]
@@ -28,6 +28,7 @@ Linux for many years - due to the technical nature of the people who develop it,
 
 #### Software
 - Zen Browser
+- Brave Origine wan
 - NCSpot
 - Obsidian
 - VSCode
@@ -44,8 +45,13 @@ Linux for many years - due to the technical nature of the people who develop it,
 - AMD GPU
 - 32+ GB of RAM
 #### Ensuring your system is healthy
-- Checking average wattage
-- etc.
+
+In order to make sure your system is healthy, we want to verify two things. 
+- Active CPU usage
+- Wattage 
+
+We can do this by opening btop in the terminal and making sure that the wattage in the top right is under 10W and that the active CPU column does not read any processes using anything more then 10% usage at any given moment. Some tasks will spike CPU usage and that is fine, but we really want to make sure that everything is checking out in-case you catch a ghost process that drives up your CPU usage! 
+
 #### And thats it!
 
 #### Laptop list
@@ -53,3 +59,7 @@ Linux for many years - due to the technical nature of the people who develop it,
 - Framework 12
 - Framework 13
 - Framework 13 Pro
+- Framework 16
+- Thinkpad T14 (any generation)
+- Panasonic Lets Note (any generation)
+
