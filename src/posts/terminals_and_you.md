@@ -1,5 +1,13 @@
---- title: Terminals and You! date: '2026-09-16' description: Its funny how we end up going full circle literally every year. tags: [computer science, software, AI] published: true --- # Terminals and You!
+--- 
+title: Terminals and You! 
+date: '2026-09-16'
+description: Its funny how we end up going full circle literally every year. 
+tags: [computer science, software, AI] 
+published: true
+---
+# Terminals and You!
 Welcome to 2026 - AI is everywhere, and literally every single time you open Twitter there is another company producing an IDE with "AI" integration. Lets be real here - none of them are doing literally anything different from a product development perspective. They *ALL* suck! So with that in mind, how do we deal with this insane amount of just annoying AI integration in everything we do? The answer is quite simple. We need to go back in time to when we were using terminals for everything (which for the record was literally 4 years ago). Hopefully this blog update will make it easier for you as a person to be able to engage with terminal first workflows such that you can create and develop code in frankly a more optimal way. 
+
 
 ## A major disclaimer
 

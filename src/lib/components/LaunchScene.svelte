@@ -17,12 +17,14 @@
 	let flight = $derived(reducedMotion ? 0 : paused ? pausedFlight : clamp((progress - 0.08) / 0.92));
 	const ease = (value: number) => value * value * (3 - 2 * value);
 	// Finish climbing, turn left, charge the drive, then jump at the end of the scroll.
-	let ascent = $derived(clamp(flight / 0.82));
-	let turn = $derived(ease(clamp((flight - 0.82) / 0.08)));
-	let charge = $derived(clamp((flight - 0.9) / 0.04));
-	let warp = $derived(clamp((flight - 0.94) / 0.055));
+	let ascent = $derived(clamp(flight / 0.76));
+	// The turn spans 12% of the flight instead of 8%: 50% more scroll distance.
+	let turn = $derived(ease(clamp((flight - 0.76) / 0.12)));
+	let charge = $derived(clamp((flight - 0.88) / 0.05));
+	let warp = $derived(clamp((flight - 0.93) / 0.065));
 	let warpGlow = $derived(charge * (1 - warp));
-	let rocketOpacity = $derived(1 - clamp((warp - 0.15) / 0.65));
+	let jumpBurst = $derived(Math.sin(warp * Math.PI));
+	let rocketOpacity = $derived(1 - clamp((warp - 0.45) / 0.5));
 	let stage = $derived(progress < 0.08 ? 0 : progress < 0.35 ? 1 : progress < 0.72 ? 2 : 3);
 	const stages = ['On the launchpad', 'A little less Earth.', 'A little more possibility.', 'Keep looking up.'];
 	const notes = ['Every good flight starts with a little curiosity.', 'From an idea on paper to something in the sky.', 'Hardware, software, and everything in between.', 'There’s always something else to figure out.'];
@@ -38,8 +40,8 @@
 		{ x: 940, y: 225, duration: 27, delay: -18 },
 		{ x: 610, y: 140, duration: 33, delay: -3 }
 	];
-	const warpStars = Array.from({ length: 14 }, (_, i) => ({
-		x: 550 + (i * 83) % 450, y: 70 + (i * 47) % 390, length: 12 + (i % 4) * 8
+	const warpStars = Array.from({ length: 28 }, (_, i) => ({
+		x: (i * 83 + 45) % 1000, y: 70 + (i * 47) % 470, length: 18 + (i % 4) * 12
 	}));
 	const smoke = Array.from({ length: 14 }, (_, i) => ({
 		x: (i % 2 ? 1 : -1) * (12 + Math.floor(i / 2) * 19),
@@ -113,10 +115,10 @@
 						</g>
 					{/each}
 				</g>
-				<!-- Short horizontal star trails accompany the jump, behind all UI panels. -->
-				<g opacity={Math.sin(warp * Math.PI) * 0.65} fill="var(--light)">
+				<!-- Star trails build during charging, then stretch across the sky at the jump. -->
+				<g opacity={Math.max(charge * 0.2 * (1 - warp), jumpBurst * 0.9)} fill="var(--light)">
 					{#each warpStars as star}
-						<rect x={star.x + warp * 140} y={star.y} width={star.length + warp * 100} height="2" />
+						<rect x={star.x + warp * 220} y={star.y} width={star.length + charge * 25 + warp * 260} height="2" />
 					{/each}
 				</g>
 
@@ -189,13 +191,20 @@
 				<g transform={`translate(${Math.round(ascent * 12)} ${Math.round(-ascent * 260)})`}>
 					<!-- A local pixel flash and engine trail, rather than a screen-wide flash. -->
 					<g transform="translate(1396 0) scale(-1 1)" opacity={warpGlow} fill="var(--light)">
+						<g transform={`translate(798 472) scale(${1 + charge * 0.3 + warp * 1.8}) translate(-798 -472)`}>
 						<path d="M780 444h4v-8h8v-4h12v4h8v8h4v56h-4v8h-8v4h-12v-4h-8v-8h-4v-16h4v16h8v4h12v-4h8v-56h-8v-4h-12v4h-8v16h-4Z" />
+						</g>
 						<rect x={610 - charge * 50} y="469" width={80 + charge * 50} height="6" opacity="0.65" />
 						<rect x={635 - charge * 35} y="459" width={48 + charge * 35} height="3" opacity="0.35" />
 						<rect x={635 - charge * 35} y="482" width={48 + charge * 35} height="3" opacity="0.35" />
 					</g>
+					<g opacity={jumpBurst} fill="var(--light)">
+						<rect x={698 - warp * 600} y="467" width={warp * 600 + 80} height="10" />
+						<rect x={698 - warp * 480} y="453" width={warp * 480 + 60} height="4" opacity="0.5" />
+						<rect x={698 - warp * 480} y="487" width={warp * 480 + 60} height="4" opacity="0.5" />
+					</g>
 					<g transform={`translate(${Math.round(-warp * warp * 800)} 0)`} opacity={rocketOpacity}>
-					<g transform={`translate(698 472) scale(${1 + warp * 1.8} ${1 - warp * 0.85}) translate(-698 -472)`}>
+					<g transform={`translate(698 472) scale(${1 + warp * 4.5} ${1 - warp * 0.85}) translate(-698 -472)`}>
 					<g class="rocket" transform={`rotate(${-turn * 90} 698 472)`}>
 						<g class="exhaust" style={`opacity: ${clamp(flight * 20)}`}>
 							<path d="M686 550h24v20h-4v24h-4v24h-8v-16h-4v-28h-4z" fill="var(--rust)" />
@@ -233,7 +242,7 @@
 				<p class="bio p-note">I’m <a href="/about" class="p-name u-url">Niels Leo Larsen</a>.<br />Aerospace engineer by trade.<br />Computer enthusiast by passion.</p>
 				<div class="intro-links"><a href="/about">Meet the engineer <span aria-hidden="true">↗</span></a><a href="https://github.com/brasilius" rel="me noopener" target="_blank">GitHub <span aria-hidden="true">↗</span></a></div>
 			</div>
-			<div class="flight-caption" aria-hidden="true"><span class="chapter">0{stage + 1} / FLIGHT NOTES</span><p>{flight >= 0.94 ? 'See you in hyperspace.' : flight >= 0.82 ? 'A 90° change of plans.' : stages[stage]}</p><span class="note">{flight >= 0.82 ? 'Some flights deserve a different ending.' : notes[stage]}</span></div>
+			<div class="flight-caption" aria-hidden="true"><span class="chapter">0{stage + 1} / FLIGHT NOTES</span><p>{flight >= 0.93 ? 'See you in hyperspace.' : flight >= 0.88 ? 'Hyperspace drive charging…' : flight >= 0.76 ? 'A 90° change of plans.' : stages[stage]}</p><span class="note">{flight >= 0.76 ? 'Some flights deserve a different ending.' : notes[stage]}</span></div>
 			<div class="scene-bottomline">
 				<span class="scroll-cue">↓ <span>{reducedMotion ? 'A moment on the launchpad' : paused ? 'Flight paused' : 'Scroll to launch'}</span></span>
 				<div class="scene-actions">
