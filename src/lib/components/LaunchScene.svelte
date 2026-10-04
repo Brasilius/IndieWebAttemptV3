@@ -14,14 +14,32 @@
 	let visible = $state(true);
 	const clamp = (value: number) => Math.min(1, Math.max(0, value));
 	let still = $derived(reducedMotion || paused);
-	let flight = $derived(reducedMotion ? 0 : paused ? pausedFlight : clamp((progress - 0.08) / 0.82));
+	let flight = $derived(reducedMotion ? 0 : paused ? pausedFlight : clamp((progress - 0.08) / 0.92));
+	const ease = (value: number) => value * value * (3 - 2 * value);
+	// Finish climbing, turn left, charge the drive, then jump at the end of the scroll.
+	let ascent = $derived(clamp(flight / 0.82));
+	let turn = $derived(ease(clamp((flight - 0.82) / 0.08)));
+	let charge = $derived(clamp((flight - 0.9) / 0.04));
+	let warp = $derived(clamp((flight - 0.94) / 0.055));
+	let warpGlow = $derived(charge * (1 - warp));
+	let rocketOpacity = $derived(1 - clamp((warp - 0.15) / 0.65));
 	let stage = $derived(progress < 0.08 ? 0 : progress < 0.35 ? 1 : progress < 0.72 ? 2 : 3);
 	const stages = ['On the launchpad', 'A little less Earth.', 'A little more possibility.', 'Keep looking up.'];
 	const notes = ['Every good flight starts with a little curiosity.', 'From an idea on paper to something in the sky.', 'Hardware, software, and everything in between.', 'There’s always something else to figure out.'];
 
-	const stars = Array.from({ length: 68 }, (_, i) => ({
+	const stars = Array.from({ length: 96 }, (_, i) => ({
 		x: (i * 137 + 31) % 1000, y: (i * 73 + 17) % 570,
-		size: i % 7 === 0 ? 3 : 2, delay: -(i % 9)
+		size: i % 7 === 0 ? 3 : i % 3 === 0 ? 1 : 2,
+		delay: -(i * 1.7) % 13, duration: 4 + (i % 6), layer: i % 3
+	}));
+	const starLayers = [0, 1, 2].map((layer) => stars.filter((star) => star.layer === layer));
+	const meteors = [
+		{ x: 760, y: 65, duration: 19, delay: -7 },
+		{ x: 940, y: 225, duration: 27, delay: -18 },
+		{ x: 610, y: 140, duration: 33, delay: -3 }
+	];
+	const warpStars = Array.from({ length: 14 }, (_, i) => ({
+		x: 550 + (i * 83) % 450, y: 70 + (i * 47) % 390, length: 12 + (i % 4) * 8
 	}));
 	const smoke = Array.from({ length: 14 }, (_, i) => ({
 		x: (i % 2 ? 1 : -1) * (12 + Math.floor(i / 2) * 19),
@@ -72,12 +90,33 @@
 		<div class="scene-art" aria-hidden="true">
 			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<rect width="1000" height="650" fill="var(--sky)" />
-				<g class="stars" style={`opacity: ${0.25 + flight * 0.75}; transform: translateY(${Math.round(flight * 65)}px)`}>
-					{#each stars as star, i}
-						<g class="star" style={`--delay: ${star.delay}s`}>
-							<rect x={star.x} y={star.y} width={star.size} height={star.size} fill={i % 3 ? 'var(--sand)' : 'var(--leaf)'} />
-							{#if i % 7 === 0}<path d={`M${star.x - 3} ${star.y + 1}h9M${star.x + 1} ${star.y - 3}v9`} stroke="var(--sand)" />{/if}
+				{#each starLayers as layer, depth}
+					<g class="stars" style={`opacity: ${0.4 + flight * 0.6}; transform: translateY(${Math.round(flight * (30 + depth * 35))}px)`}>
+						<g class="star-drift" style={`--drift-x: ${8 + depth * 6}px; --drift-y: ${-4 - depth * 5}px; --duration: ${38 - depth * 7}s; --delay: ${-depth * 9}s`}>
+							{#each layer as star}
+								<g class="star" style={`--delay: ${star.delay}s; --duration: ${star.duration}s`}>
+									<rect x={star.x} y={star.y} width={star.size} height={star.size} fill={depth === 0 ? 'var(--leaf)' : 'var(--sand)'} />
+									{#if star.size === 3}<path d={`M${star.x - 3} ${star.y + 1}h9M${star.x + 1} ${star.y - 3}v9`} stroke="var(--sand)" />{/if}
+								</g>
+							{/each}
 						</g>
+					</g>
+				{/each}
+				<g style={`opacity: ${0.5 + flight * 0.5}`}>
+					{#each meteors as meteor}
+						<g transform={`translate(${meteor.x} ${meteor.y})`}>
+							<g class="meteor" style={`--duration: ${meteor.duration}s; --delay: ${meteor.delay}s`}>
+								<path d="M0 0h4v4H0z" fill="var(--sand)" />
+								<path d="M5 -3h5v3H5zM11 -6h5v3h-5z" fill="var(--sand)" opacity="0.55" />
+								<path d="M17 -9h5v3h-5zM23 -12h4v3h-4z" fill="var(--sand)" opacity="0.2" />
+							</g>
+						</g>
+					{/each}
+				</g>
+				<!-- Short horizontal star trails accompany the jump, behind all UI panels. -->
+				<g opacity={Math.sin(warp * Math.PI) * 0.65} fill="var(--light)">
+					{#each warpStars as star}
+						<rect x={star.x + warp * 140} y={star.y} width={star.length + warp * 100} height="2" />
 					{/each}
 				</g>
 
@@ -102,12 +141,34 @@
 				</g>
 
 			</svg>
-			<!-- A square, independent viewport preserves the moon's pixel-circle silhouette. -->
-			<svg class="moon-art" viewBox="0 0 88 88" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style={`transform: translateY(${Math.round(flight * 95)}px)`}>
-				<path d="M24 0h40v8h16v12h8v48h-8v12H64v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon)" />
-				<path d="M24 0h16v8H24v12h-8v40h8v12h16v8h24v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--moon-shade)" />
-				<path d="M56 24h8v8h-8zM40 54h12v8H40z" fill="var(--moon-shade)" />
+			<!-- Independent square viewports keep the Destiny cameos on the pixel grid. -->
+			<svg class="traveler-art" viewBox="-8 -8 104 104" preserveAspectRatio="xMidYMid meet" shape-rendering="crispEdges" style={`transform: translateY(${Math.round(flight * 95)}px)`}>
+				<g class="traveler-halo" fill="none" stroke="var(--light)">
+					<path d="M24 -5h40v8h19v16h10v50H83v16H64v8H24v-8H5V69H-5V19H5V3h19Z" />
+				</g>
+				<path d="M24 0h40v8h16v12h8v48h-8v12H64v8H24v-8H8V68H0V20h8V8h16Z" fill="var(--traveler-shell)" />
+				<path d="M64 8h16v12h8v48h-8v12H64v8H24v-8H8V60h8v12h16v8h24v-8h12V60h8V28h-4V16H64Z" fill="var(--traveler-shade)" />
+				<path d="M24 8h24v4H28v8H16v20h-4V20h12zM32 20h8v4h-8zM60 28h8v4h-8zM20 48h8v4h-8z" fill="var(--traveler-highlight)" />
+				<!-- Weathered panels and the fractured underside distinguish the Traveler. -->
+				<path d="M52 12v12h8v12h12M12 44h16v12h12M76 44H64v12h-8" fill="none" stroke="var(--traveler-seam)" stroke-width="2" />
+				<path d="M32 64h8v-8h8v12h8v-8h8v8h8v8h-8v4H52v8H36v-8H24v-8h8Z" fill="var(--traveler-core)" />
+				<path d="M36 64h4v8h8v4h-8v4h-4zM52 68h8v4h-4v8h-4z" fill="var(--traveler-seam)" />
+				<path class="traveler-light" d="M44 64h4v8h-4zM56 72h4v4h-4zM32 72h4v4h-4z" fill="var(--light)" />
+				<g class="traveler-fragments" fill="var(--traveler-shade)"><path d="M28 86h4v4h-4zM60 88h4v4h-4zM44 92h4v3h-4z" /></g>
 			</svg>
+			<div class="ghost-position" style={`transform: translateY(${Math.round(flight * 45)}px)`}>
+				<svg class="ghost-art" viewBox="0 0 32 32" shape-rendering="crispEdges">
+					<g class="ghost-shell">
+						<path d="M14 1h4v4h4v5h5v4h4v4h-4v4h-5v5h-4v4h-4v-4h-4v-5H5v-4H1v-4h4v-4h5V5h4Z" fill="var(--traveler-core)" />
+						<path d="M14 2h4v4h3v5h-7zM21 14h5v-3h-3V8h-4v6zM30 14v4h-4v3h-5v-7zM18 30h-4v-4h-3v-5h7zM2 18v-4h4v-3h5v7z" fill="var(--traveler-shell)" />
+						<path d="M14 6h3v5h-3zM22 15h4v3h-4zM14 22h3v4h-3zM6 14h4v3H6z" fill="var(--traveler-shade)" />
+					</g>
+					<path d="M12 10h8v2h2v8h-2v2h-8v-2h-2v-8h2Z" fill="var(--traveler-shade)" />
+					<path d="M13 12h6v1h1v6h-1v1h-6v-1h-1v-6h1Z" fill="var(--traveler-core)" />
+					<path class="ghost-eye" d="M15 13h2v2h2v2h-2v2h-2v-2h-2v-2h2Z" fill="var(--light)" />
+					<rect x="15" y="15" width="2" height="2" fill="var(--traveler-highlight)" />
+				</svg>
+			</div>
 			<svg class="flight-art" bind:this={flightArt} viewBox="560 100 230 500" preserveAspectRatio="xMidYMax meet" shape-rendering="crispEdges">
 				<g class="launch-tower" style={`transform: translateY(${Math.round(flight * towerTravel)}px)`}>
 					<!-- Open steel launch gantry. -->
@@ -125,8 +186,17 @@
 					</g>
 				</g>
 				<!-- Hand-built sprite: every contour stays on the pixel grid. -->
-				<g style={`transform: translate(${Math.round(flight * 12)}px, ${Math.round(-flight * 260)}px)`}>
-					<g class="rocket">
+				<g transform={`translate(${Math.round(ascent * 12)} ${Math.round(-ascent * 260)})`}>
+					<!-- A local pixel flash and engine trail, rather than a screen-wide flash. -->
+					<g transform="translate(1396 0) scale(-1 1)" opacity={warpGlow} fill="var(--light)">
+						<path d="M780 444h4v-8h8v-4h12v4h8v8h4v56h-4v8h-8v4h-12v-4h-8v-8h-4v-16h4v16h8v4h12v-4h8v-56h-8v-4h-12v4h-8v16h-4Z" />
+						<rect x={610 - charge * 50} y="469" width={80 + charge * 50} height="6" opacity="0.65" />
+						<rect x={635 - charge * 35} y="459" width={48 + charge * 35} height="3" opacity="0.35" />
+						<rect x={635 - charge * 35} y="482" width={48 + charge * 35} height="3" opacity="0.35" />
+					</g>
+					<g transform={`translate(${Math.round(-warp * warp * 800)} 0)`} opacity={rocketOpacity}>
+					<g transform={`translate(698 472) scale(${1 + warp * 1.8} ${1 - warp * 0.85}) translate(-698 -472)`}>
+					<g class="rocket" transform={`rotate(${-turn * 90} 698 472)`}>
 						<g class="exhaust" style={`opacity: ${clamp(flight * 20)}`}>
 							<path d="M686 550h24v20h-4v24h-4v24h-8v-16h-4v-28h-4z" fill="var(--rust)" />
 							<path d="M690 550h16v22h-4v20h-8v-20h-4z" fill="var(--sand)" />
@@ -146,6 +216,8 @@
 						<path d="M690 542h16v8h4v4h-24v-4h4z" fill="var(--sand)" />
 						<path d="M694 481h8v3h-8zM696 478h4v9h-4z" fill="var(--rust)" />
 					</g>
+					</g>
+					</g>
 				</g>
 			</svg>
 		</div>
@@ -161,7 +233,7 @@
 				<p class="bio p-note">I’m <a href="/about" class="p-name u-url">Niels Leo Larsen</a>.<br />Aerospace engineer by trade.<br />Computer enthusiast by passion.</p>
 				<div class="intro-links"><a href="/about">Meet the engineer <span aria-hidden="true">↗</span></a><a href="https://github.com/brasilius" rel="me noopener" target="_blank">GitHub <span aria-hidden="true">↗</span></a></div>
 			</div>
-			<div class="flight-caption" aria-hidden="true"><span class="chapter">0{stage + 1} / FLIGHT NOTES</span><p>{stages[stage]}</p><span class="note">{notes[stage]}</span></div>
+			<div class="flight-caption" aria-hidden="true"><span class="chapter">0{stage + 1} / FLIGHT NOTES</span><p>{flight >= 0.94 ? 'See you in hyperspace.' : flight >= 0.82 ? 'A 90° change of plans.' : stages[stage]}</p><span class="note">{flight >= 0.82 ? 'Some flights deserve a different ending.' : notes[stage]}</span></div>
 			<div class="scene-bottomline">
 				<span class="scroll-cue">↓ <span>{reducedMotion ? 'A moment on the launchpad' : paused ? 'Flight paused' : 'Scroll to launch'}</span></span>
 				<div class="scene-actions">
@@ -175,13 +247,20 @@
 </section>
 
 <style>
-	.journey { --sky: #11140f; --leaf: #9dc87a; --leaf-dark: #587346; --sand: #c8a96e; --cream: #e2d9c8; --rust: #b9784c; --moon: #ffffff; --moon-shade: #c4ccd4; --cloud: #343d2e; --smoke: #68715a; --mountain-far: #252e21; --mountain-lit: #343d2b; --mountain-near: #3b4931; --ground: #1b2419; --terrain-detail: #46533a; --gantry: #637153; position: relative; margin-top: -3rem; }
+	.journey { --sky: #11140f; --leaf: #9dc87a; --leaf-dark: #587346; --sand: #c8a96e; --cream: #e2d9c8; --rust: #b9784c; --traveler-shell: #e7e9e7; --traveler-highlight: #ffffff; --traveler-shade: #b9c3c7; --traveler-seam: #879799; --traveler-core: #3a494d; --light: #a6e5ed; --cloud: #343d2e; --smoke: #68715a; --mountain-far: #252e21; --mountain-lit: #343d2b; --mountain-near: #3b4931; --ground: #1b2419; --terrain-detail: #46533a; --gantry: #637153; position: relative; margin-top: -3rem; }
 	.journey.ready:not(.reduced) { height: 300svh; }
 	.stage { position: sticky; top: calc(var(--nav-height) + env(safe-area-inset-top)); height: calc(100dvh - var(--nav-height) - env(safe-area-inset-top)); min-height: 620px; overflow: hidden; background: var(--sky); --inset: clamp(1rem, 5vw, 7rem); --panel: #11180f; --copy: #d5dccb; --panel-border: #536247; }
 	.scene-art { position: absolute; inset: 0; pointer-events: none; }
 	/* Terrain fills the screen; the vehicle uses a separate, aspect-preserving viewport.
 	   Its scale is the smaller fraction of the available width and height. */
-	.moon-art { position: absolute; top: 17%; right: 12%; width: min(clamp(48px, 9vw, 144px), 16svh); height: auto; aspect-ratio: 1; overflow: visible; }
+	.traveler-art { position: absolute; top: 17%; right: 12%; width: min(clamp(48px, 9vw, 144px), 16svh); height: auto; aspect-ratio: 1; overflow: visible; }
+	.ghost-position { position: absolute; top: 39%; right: 29%; width: clamp(22px, 2.5vw, 34px); }
+	.ghost-art { display: block; width: 100%; height: auto; overflow: visible; animation: ghost-flight 14s ease-in-out infinite; }
+	.ghost-shell { transform-box: view-box; transform-origin: center; animation: ghost-turn 14s ease-in-out infinite; }
+	.ghost-eye { animation: light-pulse 4s ease-in-out infinite; }
+	.traveler-halo { animation: halo-pulse 9s ease-in-out infinite; opacity: 0.12; }
+	.traveler-light { animation: light-pulse 7s ease-in-out infinite; }
+	.traveler-fragments { animation: fragments 8s steps(4) infinite alternate; }
 	.landscape { width: 100%; height: 100%; display: block; }
 	/* Only the outer stage clips departing scenery; this viewport is for scaling. */
 	.flight-art { position: absolute; width: 34%; height: 84%; right: 8%; bottom: 9%; overflow: visible; }
@@ -211,22 +290,42 @@
 	.scroll-cue { display: flex; align-items: center; gap: 0.7rem; color: var(--leaf); }
 	.flight-track { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--panel-border); }
 	.flight-track span { display: block; width: 100%; height: 100%; background: var(--leaf); transform-origin: left; }
-	.star { animation: twinkle 5s steps(1) infinite; animation-delay: var(--delay); }
+	.star { animation: twinkle var(--duration) steps(3, end) infinite; animation-delay: var(--delay); }
+	.star-drift { animation: drift var(--duration) linear infinite alternate; animation-delay: var(--delay); }
+	.meteor { opacity: 0; animation: shooting-star var(--duration) linear infinite; animation-delay: var(--delay); }
 	.beacon { animation: twinkle 2s steps(1) infinite; }
 	.exhaust { transform-box: fill-box; transform-origin: top center; animation: burn 0.3s steps(2, end) infinite; }
 	.smoke { animation: vent 2s steps(6) infinite; animation-delay: var(--delay); }
 	.journey:not(.ready), .still, .asleep { --logo-play-state: paused; }
 	.journey:not(.ready) *, .still *, .asleep * { animation-play-state: paused !important; }
 	@keyframes twinkle { 0%, 75%, 100% { opacity: 0.8; } 40% { opacity: 0.3; } }
+	@keyframes drift { from { transform: translate(0, 0); } to { transform: translate(var(--drift-x), var(--drift-y)); } }
+	@keyframes shooting-star {
+		0%, 86% { opacity: 0; transform: translate(0, 0); }
+		87% { opacity: 0.85; transform: translate(-8px, 4px); }
+		93% { opacity: 0; transform: translate(-160px, 80px); }
+		100% { opacity: 0; transform: translate(-160px, 80px); }
+	}
+	@keyframes ghost-flight {
+		0%, 100% { transform: translate(0, 0) rotate(-5deg); }
+		25% { transform: translate(-14px, -12px) rotate(4deg); }
+		50% { transform: translate(8px, -20px) rotate(-3deg); }
+		75% { transform: translate(18px, 3px) rotate(6deg); }
+	}
+	@keyframes ghost-turn { 0%, 35%, 65%, 100% { transform: rotate(0deg); } 48%, 52% { transform: rotate(90deg); } }
+	@keyframes light-pulse { 0%, 100% { opacity: 0.65; } 50% { opacity: 1; } }
+	@keyframes halo-pulse { 0%, 100% { opacity: 0.08; } 50% { opacity: 0.25; } }
+	@keyframes fragments { from { transform: translateY(0); } to { transform: translateY(3px); } }
 	@keyframes burn { from { transform: scaleY(0.78); } to { transform: scaleY(1.15); } }
 	@keyframes vent { from { transform: translate(0, 0); opacity: 0.8; } to { transform: translate(var(--drift), -12px); opacity: 0.2; } }
-	:global([data-theme='light']) .journey { --sky: #e9e7d6; --leaf: #527b39; --leaf-dark: #496538; --sand: #876536; --cream: #2a3824; --moon: #ffffff; --moon-shade: #c4ccd4; --cloud: #ccd0b6; --smoke: #a3af91; --mountain-far: #c5c9ac; --mountain-lit: #d6d4b7; --mountain-near: #a5b38b; --ground: #c1c7a6; --terrain-detail: #8c9d75; --gantry: #7d896b; }
+	:global([data-theme='light']) .journey { --sky: #e9e7d6; --leaf: #527b39; --leaf-dark: #496538; --sand: #876536; --cream: #2a3824; --traveler-shell: #e7e9e7; --traveler-highlight: #ffffff; --traveler-shade: #b9c3c7; --traveler-seam: #879799; --traveler-core: #3a494d; --light: #a6e5ed; --cloud: #ccd0b6; --smoke: #a3af91; --mountain-far: #c5c9ac; --mountain-lit: #d6d4b7; --mountain-near: #a5b38b; --ground: #c1c7a6; --terrain-detail: #8c9d75; --gantry: #7d896b; }
 	:global([data-theme='light']) .stage { --panel: #f1f1e3; --copy: #38452f; --panel-border: #829371; }
 	@media (max-width: 850px) {
 		.stage { --inset: 1rem; min-height: 660px; }
 		.scene-topline { font-size: 0.6875rem; }
 		.edition { display: none; }
-		.moon-art { top: 49%; right: 9%; width: clamp(36px, 8vw, 64px); }
+		.traveler-art { top: 49%; right: 9%; width: clamp(36px, 8vw, 64px); }
+		.ghost-position { top: 57%; right: 31%; width: 22px; }
 		.intro { top: 3.4rem; width: calc(100% - 2rem); padding: 1rem; }
 		.pixel-logo { width: clamp(150px, 35vw, 220px); margin-bottom: 0.75rem; }
 		.greeting { font-size: 0.75rem; margin-bottom: 0.75rem; }
