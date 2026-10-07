@@ -1,7 +1,7 @@
 ---
 title: How I Set Up Linux Machines for Work and Productivity.
 date: '2026-06-15'
-description: Linux is often touted as inpractical for every day work - I genuinely disagree.
+description: My linux software stack!
 tags: [linux, productivity, engineering]
 published: true
 ---
@@ -24,17 +24,17 @@ Linux for many years - due to the technical nature of the people who develop it,
 ### My personal set up structure
 
 #### Distro of choice
-- Ubuntu 26.04 LTS
+- Fedora 44 KDE Plasma Desktop Edition
 
 #### Software
 - Zen Browser
-- Brave Origine wan
+- Brave Origin
 - NCSpot
 - Obsidian
-- VSCode
+- NeoVim(LazyVim Configuration)
 - WinBoat
 - OnlyOffice
-- Sticky Notes
+- Sticky Notes/or just text editor
 - Btop
 #### Windows apps
 - Solidworks
@@ -46,13 +46,15 @@ Linux for many years - due to the technical nature of the people who develop it,
 - 32+ GB of RAM
 #### Ensuring your system is healthy
 
-In order to make sure your system is healthy, we want to verify two things. 
+As an active developer and linux user, its always important to understand exactly what your system is running, so you can maximize battery life and performance.
+
+Using Btop, can allow you to see all of the following metrics:
 - Active CPU usage
 - Wattage 
+- Memory usage
 
-We can do this by opening btop in the terminal and making sure that the wattage in the top right is under 10W and that the active CPU column does not read any processes using anything more then 10% usage at any given moment. Some tasks will spike CPU usage and that is fine, but we really want to make sure that everything is checking out in-case you catch a ghost process that drives up your CPU usage! 
+I highly recommend taking a look at least once per session at this, just to make sure everything is fine!
 
-#### And thats it!
 
 #### Laptop list
 
