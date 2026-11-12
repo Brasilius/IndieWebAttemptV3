@@ -9,7 +9,7 @@ Matcha-green palette, markdown-based posts and projects, microformats2 markup (h
 - **Framework** — SvelteKit 2 + Svelte 5 (runes)
 - **Markdown** — mdsvex (`.md` files compile to Svelte components, smartypants enabled)
 - **Styling** — Custom CSS with design tokens in `src/app.css`
-- **Fonts** — Inter (body) + IBM Plex Mono (code/accents) via Google Fonts
+- **Fonts** — Bundled Monocraft (Minecraft style)
 - **Analytics** — Vercel Web Analytics + Speed Insights (`@vercel/analytics`, `@vercel/speed-insights`)
 - **PDF rendering** — pdfjs-dist (resume page)
 
@@ -22,10 +22,23 @@ Matcha-green palette, markdown-based posts and projects, microformats2 markup (h
 | `/blog/[slug]` | Individual post |
 | `/projects` | Projects index |
 | `/projects/[slug]` | Individual project |
+| `/games` | Destiny Weapon Wordle — unlimited rounds, length selection, local progress, animated pixel Xûr |
 | `/about` | About + h-card |
 | `/now` | /now page |
 | `/resume` | Resume |
 | `/search` | Full-text search across posts |
+
+## Weapon minigame
+
+The `/games` arsenal is curated in `src/lib/games/weapons.ts` and bundled with the
+client. Playing makes no requests to the Destiny API and requires no API key.
+Complete weapon names are normalized to A–Z (ignoring spaces, punctuation, and
+accents) and capped at eight letters. Add names to that file to extend the pool.
+Rounds and stats are saved in browser localStorage; unavailable storage falls back
+to playing for the current visit. The two-frame Xûr sprite is a local SVG component
+with a pause control and reduced-motion support.
+
+Run the game logic checks with `npm run test:game`.
 
 ## Adding a post
 

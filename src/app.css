@@ -2,6 +2,15 @@
    GROUND — a matcha-toned IndieWeb stylesheet
    ============================================ */
 
+/* === Minecraft-style typeface (bundled under the SIL Open Font License) === */
+@font-face {
+	font-family: 'Monocraft';
+	src: url('/fonts/Monocraft.ttf') format('truetype');
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+}
+
 /* === Tokens === */
 :root {
 	/* Backgrounds */
@@ -27,7 +36,7 @@
 
 	/* Typography */
 	--font-sans: var(--font-mono);
-	--font-mono: 'SF Mono', SFMono-Regular, ui-monospace, 'IBM Plex Mono', Menlo, Consolas, monospace;
+	--font-mono: 'Monocraft', ui-monospace, Menlo, Consolas, monospace;
 
 	/* Geometry */
 	--radius:     0px;
@@ -87,6 +96,8 @@ body {
 }
 
 img, video { max-width: 100%; display: block; }
+
+button, input, select, textarea { font: inherit; }
 
 /* === Links === */
 a {

@@ -4,12 +4,12 @@ import type { RequestHandler } from './$types';
 
 const SITE = 'https://nielslarsen.dev';
 
-const staticRoutes = ['', '/about', '/blog', '/projects', '/resume', '/now', '/search'];
+const staticRoutes = ['', '/about', '/blog', '/projects', '/games', '/resume', '/now', '/search'];
 
 export const GET: RequestHandler = async () => {
 	const [posts, projects] = await Promise.all([getPosts(), getProjects()]);
 
-	const urls = [
+	const urls: { loc: string; lastmod?: string }[] = [
 		...staticRoutes.map((path) => ({ loc: `${SITE}${path}` })),
 		...posts.map((p) => ({ loc: `${SITE}/blog/${p.slug}`, lastmod: p.date })),
 		...projects.map((p) => ({ loc: `${SITE}/projects/${p.slug}`, lastmod: p.date }))

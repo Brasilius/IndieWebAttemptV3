@@ -42,20 +42,19 @@
 
 			<div class="prose">
 				<p>
-					Hi - I'm Leo. I'm an aerospace engineer working out of Dallas, Texas. 
-					I have a passion for building systems that work together!
+					Hi - I'm Leo. I'm an aerospace engineer and computer scientist working out of El Segundo, California. I have a passion for making systems talk to one another, and innovative solutions!
 				</p>
 
 				<p>
-					I'm currently looking for new oppurtunities in both aerospace and software development. If you think I might be a good fit for your team, please reach out!
+					No longer looking for oppurtunities, but i'm always eager to talk tech or rockets!
 				</p>
 
 				<h2>What I'm into</h2>
 				<ul>
-					<li>Building wireless telemetry systems</li>
-					<li>Helldivers 2 (and also Minecraft)</li>
+					<li>Building wireless telemetry systems(still)</li>
+					<li>Overwatch 2 and Helldivers 2!</li>
 					<li>Mechanical keyboards and Linux ricing</li>
-					<li>Science fiction - especially sci-fi like "The Expanse"</li>
+					<li>I've been super into Mr. and Mrs. Smith lately!</li>
 				</ul>
 
 				<h2>This site</h2>

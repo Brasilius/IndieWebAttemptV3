@@ -34,9 +34,9 @@
 			currently
 		</h2>
 		<ul>
-			<li><span class="key">reading</span> <span class="val">Project Hail Mary — Andy Weir</span></li>
-			<li><span class="key">building</span> <span class="val">a new payload 😭</span></li>
-			<li><span class="key">learning</span> <span class="val">about Paul Atreides</span></li>
+			<li><span class="key">reading</span> <span class="val">The Fourth Wing by Rebecca Yarros</span></li>
+			<li><span class="key">building</span> <span class="val">Resilient radio systems</span></li>
+			<li><span class="key">learning</span> <span class="val">SNR and Latency</span></li>
 		</ul>
 		<a href="/now" class="now-link">full /now page →</a>
 	</section>

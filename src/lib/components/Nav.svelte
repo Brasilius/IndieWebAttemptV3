@@ -7,6 +7,7 @@
 		{ href: '/about',    label: 'about'    },
 		{ href: '/blog',     label: 'blog'     },
 		{ href: '/projects', label: 'projects' },
+		{ href: '/games',    label: 'games'    },
 		{ href: '/resume',   label: 'resume'   },
 		{ href: '/now',      label: 'now'      },
 	];
@@ -20,7 +21,11 @@
 	let navList: HTMLUListElement;
 
 	onMount(() => {
-		light = localStorage.getItem('theme') === 'light';
+		try {
+			light = localStorage.getItem('theme') === 'light';
+		} catch {
+			// Storage can be blocked by browser privacy settings.
+		}
 		applyTheme(light);
 
 		// Scroll the active link into view so the current page is always visible
@@ -34,7 +39,11 @@
 
 	function toggleTheme() {
 		light = !light;
-		localStorage.setItem('theme', light ? 'light' : 'dark');
+		try {
+			localStorage.setItem('theme', light ? 'light' : 'dark');
+		} catch {
+			// The theme still works for this visit when saving is unavailable.
+		}
 		applyTheme(light);
 	}
 </script>

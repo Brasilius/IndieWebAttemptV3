@@ -1,5 +1,5 @@
 ---
-title: Tools I Use
+title: Tools I Use.
 date: '2026-04-06'
 description: Current hardware, software, and workflow setup.
 tags: [tools, setup, productivity]
@@ -32,18 +32,17 @@ This is the tech I use on a daily basis for a wide variety of tasks across engin
 
 ## Software
 
-**Editor** - VSCode on my main machine, but I do tend to use Micro/Nano in more resource constrained environments like Linux SBCs.
+**Editor** - I use Neovim with the Lazyvim configuration across the board from my main machine, to linux SBC's being used out on the field. 
 
-**Terminal** - Standard Fedora Terminal (Ptyxis)
+**Terminal** - Ghostty Terminal Emulator
 
-**Browser** - Zen Browser (occasionally Brave incase something isnt working properly.)
+**Browser** - Zen Browser and Brave Origin
 
-**Notes** - ObsidianMD
+**Notes** - ObsidianMD, Sticky Notes
 
-**This site** - Built with [SvelteKit](https://kit.svelte.dev) and [mdsvex](https://mdsvex.pngwn.io).
 
 **Additional Software** - WinBoat, I use this to "emulate" windows only software efficiently such as SolidWorks and the Microsoft Office Suite, without ever having to leave Linux!
 
 ---
 
-*Last updated April 2026.*
+*Last updated September 2026.*
