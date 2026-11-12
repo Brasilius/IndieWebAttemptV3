@@ -111,7 +111,7 @@
 	<header class="page-header">
 		<p class="eyebrow">SIDE QUEST / 001</p>
 		<h1>Weapon Wordle</h1>
-		<p>Six guesses. One Destiny weapon. A little help from the Nine.</p>
+		<p>Six Guesses, Will you please the Nine?</p>
 	</header>
 
 	<div class="encounter">
