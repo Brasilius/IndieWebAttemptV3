@@ -24,7 +24,7 @@
 		<p class="ground-label">BACK ON THE GROUND</p>
 		<h2>A few things in my orbit.</h2>
 		<p>I work across the stack, from embedded systems to finite element analysis, computational fluid dynamics, and astrodynamics. This is where I keep what I’m building, learning, and figuring out along the way.</p>
-		<a href="https://www.instagram.com/niels_leo_larsen/" rel="me noopener" target="_blank">Field notes on Instagram ↗</a>
+		<a href="https://www.instagram.com/leoo.dev/" rel="me noopener" target="_blank">Field notes on Instagram ↗</a>
 	</div>
 
 	<!-- Currently section -->

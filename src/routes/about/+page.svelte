@@ -3,7 +3,7 @@
 
 	const links = [
 		{ href: 'https://github.com/brasilius',    label: '/github',   rel: 'me noopener noreferrer' },
-		{ href: 'https://www.instagram.com/niels_leo_larsen/',       label: '/instagram', rel: 'me noopener noreferrer' },
+		{ href: 'https://www.instagram.com/leoo.dev/',       label: '/instagram', rel: 'me noopener noreferrer' },
 		{ href: 'mailto:leonardolarsen9605@outlook.com',            label: '/email',    rel: '' },
 	];
 </script>
