@@ -102,7 +102,7 @@
 <svelte:head>
 	<title>Weapon Wordle · games · Leo</title>
 	<meta name="description" content="Guess a Destiny weapon in six tries. Choose your word length, play unlimited rounds, and meet pixel Xûr." />
-	<meta property="og:title" content="Weapon Wordle · Leo" />
+	<meta property="og:title" content="D2 Wordle · Leo" />
 	<meta property="og:description" content="A little Destiny guessing game with a very mysterious merchant." />
 	<meta property="og:url" content="https://nielslarsen.dev/games" />
 </svelte:head>
