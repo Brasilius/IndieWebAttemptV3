@@ -116,7 +116,7 @@
 <section class="journey" class:ready class:still class:reduced={reducedMotion} class:asleep={!visible} bind:this={journey} aria-label="Making things fly — a scroll-driven pixel rocket launch">
 	<div class="stage" bind:this={scene} style={`--flight: ${flight}; --ignition: ${clamp(flight * 12)};`}>
 		<div class="scene-art" aria-hidden="true">
-			<svg class="landscape" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
+			<svg class="sky-art" viewBox="0 0 1000 650" preserveAspectRatio="none" shape-rendering="crispEdges">
 				<rect width="1000" height="650" fill="var(--sky)" />
 				{#each starLayers as layer, depth}
 					<g class="stars" style={`opacity: ${0.4 + flight * 0.6}; transform: translateY(${flight * (30 + depth * 35)}px)`}>
