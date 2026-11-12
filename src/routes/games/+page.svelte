@@ -100,7 +100,7 @@
 <svelte:window onkeydown={handleKey} />
 
 <svelte:head>
-	<title>Weapon Wordle · games · Leo</title>
+	<title>D2 Wordle · games · Leo</title>
 	<meta name="description" content="Guess a Destiny weapon in six tries. Choose your word length, play unlimited rounds, and meet pixel Xûr." />
 	<meta property="og:title" content="D2 Wordle · Leo" />
 	<meta property="og:description" content="A little Destiny guessing game with a very mysterious merchant." />
