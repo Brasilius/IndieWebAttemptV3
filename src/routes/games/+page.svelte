@@ -110,7 +110,7 @@
 <div class="container arcade">
 	<header class="page-header">
 		<p class="eyebrow">SIDE QUEST / 001</p>
-		<h1>Weapon Wordle</h1>
+		<h1>D2 Wordle</h1>
 		<p>Six Guesses, Will you please the Nine?</p>
 	</header>
 
